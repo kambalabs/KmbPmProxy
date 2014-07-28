@@ -111,12 +111,16 @@ class PmProxyTest extends \PHPUnit_Framework_TestCase
     /**
      * @test
      * @expectedException \KmbPmProxy\Exception\NotFoundException
+     * @expectedExceptionMessage Remove error
      */
     public function cannotRemoveUnknownEnvironment()
     {
         $this->httpResponse->expects($this->any())
             ->method('isNotFound')
             ->will($this->returnValue(true));
+        $this->httpResponse->expects($this->any())
+            ->method('getBody')
+            ->will($this->returnValue('{"message":"Remove error"}'));
 
         $this->pmProxyService->remove($this->createEnvironment(1, 'STABLE'));
     }
