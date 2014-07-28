@@ -21,8 +21,8 @@
 namespace KmbPmProxy\Exception;
 
 /**
- * Runtime exception
+ * Resource not found exception
  */
-class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
+class NotFoundException extends \RuntimeException implements ExceptionInterface
 {
 }

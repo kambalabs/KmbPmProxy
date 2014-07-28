@@ -1,7 +1,6 @@
 <?php
 namespace KmbPmProxyTest\Service;
 
-use KmbPmProxy\Exception\RuntimeException;
 use KmbPmProxy\Model\EnvironmentHydrator;
 use KmbPmProxyTest\Bootstrap;
 use KmbDomain\Model\Environment;
@@ -37,7 +36,7 @@ class PmProxyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \KmbPmProxy\Exception\RuntimeException
      * @expectedExceptionMessage Save error
      */
     public function cannotSaveWhenRequestFails()
@@ -64,7 +63,7 @@ class PmProxyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \KmbPmProxy\Exception\RuntimeException
      * @expectedExceptionMessage Remove error
      */
     public function cannotRemoveWhenRequestFails()
@@ -81,7 +80,7 @@ class PmProxyTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @expectedException RuntimeException
+     * @expectedException \KmbPmProxy\Exception\RuntimeException
      * @expectedExceptionMessage HTTP/1.0 500 Internal Server Error
      */
     public function cannotRemoveWhenRequestFailsWithoutMessage()
@@ -107,6 +106,19 @@ class PmProxyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->pmProxyService->save($this->createEnvironment(1, 'STABLE'));
+    }
+
+    /**
+     * @test
+     * @expectedException \KmbPmProxy\Exception\NotFoundException
+     */
+    public function cannotRemoveUnknownEnvironment()
+    {
+        $this->httpResponse->expects($this->any())
+            ->method('isNotFound')
+            ->will($this->returnValue(true));
+
+        $this->pmProxyService->remove($this->createEnvironment(1, 'STABLE'));
     }
 
     protected function createEnvironment($id, $name, $parent = null)

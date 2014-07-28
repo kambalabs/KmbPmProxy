@@ -21,6 +21,7 @@
 namespace KmbPmProxy\Service;
 
 use KmbDomain\Model\EnvironmentInterface;
+use KmbPmProxy\Exception\NotFoundException;
 use KmbPmProxy\Exception\RuntimeException;
 use Zend\Http\Client;
 use Zend\Http\Headers;
@@ -184,6 +185,7 @@ class PmProxy implements PmProxyInterface
      * @param $content
      * @return PmProxy
      * @throws RuntimeException
+     * @throws NotFoundException
      */
     protected function send($method, $uri, $content = '')
     {
@@ -202,7 +204,9 @@ class PmProxy implements PmProxyInterface
         $httpResponse = $this->getHttpClient()->send($request);
         $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
 
-        if (!$httpResponse->isSuccess()) {
+        if ($httpResponse->isNotFound()) {
+            throw new NotFoundException();
+        } elseif (!$httpResponse->isSuccess()) {
             $body = $httpResponse->getBody();
             $this->getLogger()->err('[' . $httpResponse->renderStatusLine() . '] ' . $body);
             $result = Json::decode($body);
