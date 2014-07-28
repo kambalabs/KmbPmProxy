@@ -205,7 +205,7 @@ class PmProxy implements PmProxyInterface
         $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
 
         $body = $httpResponse->getBody();
-        $result = Json::decode($body);
+        $result = Json::decode(trim($body));
         $message = $result !== null && !empty($result->message) ? $result->message : $httpResponse->renderStatusLine();
         if ($httpResponse->isNotFound()) {
             throw new NotFoundException($message);
