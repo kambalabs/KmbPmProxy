@@ -54,7 +54,15 @@ class PmProxy implements PmProxyInterface
     public function save(EnvironmentInterface $environment)
     {
         $content = Json::encode($this->getEnvironmentHydrator()->extract($environment));
-        return $this->send(Request::METHOD_PUT, '/environments/' . $environment->getId(), $content);
+        $this->send(Request::METHOD_PUT, '/environments/' . $environment->getId(), $content);
+        if ($environment->hasChildren()) {
+            foreach ($environment->getChildren() as $child) {
+                /** @var EnvironmentInterface $child */
+                $content = Json::encode($this->getEnvironmentHydrator()->extract($child));
+                $this->send(Request::METHOD_PUT, '/environments/' . $child->getId(), $content);
+            }
+        }
+        return $this;
     }
 
     /**
@@ -65,7 +73,14 @@ class PmProxy implements PmProxyInterface
      */
     public function remove(EnvironmentInterface $environment)
     {
-        return $this->send(Request::METHOD_DELETE, '/environments/' . $environment->getId());
+        $this->send(Request::METHOD_DELETE, '/environments/' . $environment->getId());
+        if ($environment->hasChildren()) {
+            foreach ($environment->getChildren() as $child) {
+                /** @var EnvironmentInterface $child */
+                $this->send(Request::METHOD_DELETE, '/environments/' . $child->getId());
+            }
+        }
+        return $this;
     }
 
     /**
