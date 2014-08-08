@@ -22,6 +22,7 @@ namespace KmbPmProxy;
 
 use KmbPmProxy\Exception\NotFoundException;
 use KmbPmProxy\Exception\RuntimeException;
+use KmbPmProxy\Options\ClientOptionsInterface;
 use Zend\Http\Headers;
 use Zend\Http\Request;
 use Zend\Json\Json;
@@ -29,8 +30,8 @@ use Zend\Log\Logger;
 
 class Client implements ClientInterface
 {
-    /** @var string */
-    protected $baseUri;
+    /** @var ClientOptionsInterface */
+    protected $options;
 
     /** @var \Zend\Http\Client */
     protected $httpClient;
@@ -49,7 +50,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $uri
-     * @param array $content
+     * @param array  $content
      */
     public function put($uri, $content)
     {
@@ -58,7 +59,7 @@ class Client implements ClientInterface
 
     /**
      * @param string $uri
-     * @param array $content
+     * @param array  $content
      */
     public function post($uri, $content)
     {
@@ -74,25 +75,25 @@ class Client implements ClientInterface
     }
 
     /**
-     * Set BaseUri.
+     * Set Options.
      *
-     * @param string $baseUri
+     * @param \KmbPmProxy\Options\ClientOptionsInterface $options
      * @return Client
      */
-    public function setBaseUri($baseUri)
+    public function setOptions($options)
     {
-        $this->baseUri = $baseUri;
+        $this->options = $options;
         return $this;
     }
 
     /**
-     * Get BaseUri.
+     * Get Options.
      *
-     * @return string
+     * @return \KmbPmProxy\Options\ClientOptionsInterface
      */
-    public function getBaseUri()
+    public function getOptions()
     {
-        return $this->baseUri;
+        return $this->options;
     }
 
     /**
@@ -185,7 +186,7 @@ class Client implements ClientInterface
      */
     protected function getUri($uri)
     {
-        return ltrim($this->getBaseUri(), '/') . $uri;
+        return ltrim($this->getOptions()->getBaseUri(), '/') . $uri;
     }
 
     /**

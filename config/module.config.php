@@ -7,7 +7,9 @@ return [
         ],
         'factories' => [
             'KmbPmProxy\Client' => 'KmbPmProxy\ClientFactory',
+            'KmbPmProxy\Options\ModuleOptions' => 'KmbPmProxy\Options\ModuleOptionsFactory',
             'KmbPmProxy\Service\Environment' => 'KmbPmProxy\Service\EnvironmentFactory',
+            'KmbPmProxy\Service\Module' => 'KmbPmProxy\Service\ModuleFactory',
         ],
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',

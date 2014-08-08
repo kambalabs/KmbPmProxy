@@ -2,6 +2,7 @@
 namespace KmbPmProxyTest;
 
 use KmbPmProxy\Client;
+use KmbPmProxy\Options\ModuleOptions;
 use Zend\Log\Logger;
 
 class ClientTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class ClientTest extends \PHPUnit_Framework_TestCase
             ->method('send')
             ->will($this->returnValue($this->httpResponse));
         $this->pmProxyClient = new Client();
-        $this->pmProxyClient->setBaseUri('http://localhost');
+        $this->pmProxyClient->setOptions(new ModuleOptions());
         $this->pmProxyClient->setLogger($logger);
         $this->pmProxyClient->setHttpClient($this->httpClient);
     }

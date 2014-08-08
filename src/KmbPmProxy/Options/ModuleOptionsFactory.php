@@ -18,15 +18,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy;
+namespace KmbPmProxy\Options;
 
-use KmbPmProxy\Options\ClientOptionsInterface;
-use Zend\Http;
-use Zend\Log\Logger;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ClientFactory implements FactoryInterface
+class ModuleOptionsFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -36,21 +33,7 @@ class ClientFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $service = new Client();
-
-        /** @var ClientOptionsInterface $moduleOptions */
-        $moduleOptions = $serviceLocator->get('KmbPmProxy\Options\ModuleOptions');
-        $service->setOptions($moduleOptions);
-
-        /** @var Http\Client $httpClient */
-        $httpClient = $serviceLocator->get('KmbPmProxy\Http\Client');
-        $httpClient->setOptions($moduleOptions->getHttpOptions());
-        $service->setHttpClient($httpClient);
-
-        /** @var Logger $logger */
-        $logger = $serviceLocator->get('Logger');
-        $service->setLogger($logger);
-
-        return $service;
+        $config = $serviceLocator->get('Config');
+        return new ModuleOptions(isset($config['pmproxy']) ? $config['pmproxy'] : []);
     }
 }

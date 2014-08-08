@@ -10,6 +10,6 @@ return [
         ],
     ],
     'pmproxy' => [
-        'base_uri' => 'http://localhost:3000',
+        'base_uri' => 'http://localhost:3001',
     ]
 ];
