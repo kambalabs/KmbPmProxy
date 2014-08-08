@@ -20,13 +20,13 @@
  */
 namespace KmbPmProxy\Service;
 
+use KmbPmProxy\Client;
 use Zend\Http;
-use Zend\Log\Logger;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class PmProxyFactory implements FactoryInterface
+class EnvironmentFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -36,27 +36,15 @@ class PmProxyFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $globalConfig = $serviceLocator->get('Config');
-        $config = isset($globalConfig['pmproxy']) ? $globalConfig['pmproxy'] : array();
+        $service = new Environment();
 
-        $service = new PmProxy();
-
-        /** @var Http\Client $httpClient */
-        $httpClient = $serviceLocator->get('KmbPmProxy\Http\Client');
-        if (isset($config['http_options'])) {
-            $httpClient->setOptions($config['http_options']);
-        }
-        $service->setHttpClient($httpClient);
-
-        $service->setBaseUri($config['base_uri']);
+        /** @var Client $pmProxyClient */
+        $pmProxyClient = $serviceLocator->get('KmbPmProxy\Client');
+        $service->setPmProxyClient($pmProxyClient);
 
         /** @var HydratorInterface $environmentHydrator */
         $environmentHydrator = $serviceLocator->get('KmbPmProxy\Model\EnvironmentHydrator');
         $service->setEnvironmentHydrator($environmentHydrator);
-
-        /** @var Logger $logger */
-        $logger = $serviceLocator->get('Logger');
-        $service->setLogger($logger);
 
         return $service;
     }

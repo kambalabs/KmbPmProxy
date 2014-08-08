@@ -18,25 +18,30 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Service;
+namespace KmbPmProxy;
 
-use KmbDomain\Model\EnvironmentInterface;
-
-interface PmProxyInterface
+interface ClientInterface
 {
     /**
-     * Create or update an environment on the Puppet Master
-     *
-     * @param EnvironmentInterface $environment
-     * @return PmProxyInterface
+     * @param string $uri
+     * @return mixed
      */
-    public function save(EnvironmentInterface $environment);
+    public function get($uri);
 
     /**
-     * Remove an environment on the Puppet Master
-     *
-     * @param EnvironmentInterface $environment
-     * @return PmProxyInterface
+     * @param string $uri
+     * @param array  $content
      */
-    public function remove(EnvironmentInterface $environment);
+    public function post($uri, $content);
+
+    /**
+     * @param string $uri
+     * @param array  $content
+     */
+    public function put($uri, $content);
+
+    /**
+     * @param string $uri
+     */
+    public function delete($uri);
 }

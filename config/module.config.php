@@ -6,7 +6,8 @@ return [
             'KmbPmProxy\Model\EnvironmentHydrator' => 'KmbPmProxy\Model\EnvironmentHydrator',
         ],
         'factories' => [
-            'KmbPmProxy\Service\PmProxy' => 'KmbPmProxy\Service\PmProxyFactory',
+            'KmbPmProxy\Client' => 'KmbPmProxy\ClientFactory',
+            'KmbPmProxy\Service\Environment' => 'KmbPmProxy\Service\EnvironmentFactory',
         ],
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',

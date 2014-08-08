@@ -18,76 +18,66 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Service;
+namespace KmbPmProxy;
 
-use KmbDomain\Model\EnvironmentInterface;
 use KmbPmProxy\Exception\NotFoundException;
 use KmbPmProxy\Exception\RuntimeException;
-use Zend\Http\Client;
 use Zend\Http\Headers;
 use Zend\Http\Request;
 use Zend\Json\Json;
 use Zend\Log\Logger;
-use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class PmProxy implements PmProxyInterface
+class Client implements ClientInterface
 {
     /** @var string */
     protected $baseUri;
 
-    /** @var HydratorInterface */
-    protected $environmentHydrator;
-
-    /** @var Client */
+    /** @var \Zend\Http\Client */
     protected $httpClient;
 
     /** @var Logger */
     protected $logger;
 
     /**
-     * Create or update an environment on the Puppet Master
-     *
-     * @param EnvironmentInterface $environment
-     * @return PmProxy
-     * @throws RuntimeException
+     * @param string $uri
+     * @return mixed
      */
-    public function save(EnvironmentInterface $environment)
+    public function get($uri)
     {
-        $content = Json::encode($this->getEnvironmentHydrator()->extract($environment));
-        $this->send(Request::METHOD_PUT, '/environments/' . $environment->getId(), $content);
-        if ($environment->hasChildren()) {
-            foreach ($environment->getChildren() as $child) {
-                /** @var EnvironmentInterface $child */
-                $content = Json::encode($this->getEnvironmentHydrator()->extract($child));
-                $this->send(Request::METHOD_PUT, '/environments/' . $child->getId(), $content);
-            }
-        }
-        return $this;
+        return $this->send(Request::METHOD_GET, $uri);
     }
 
     /**
-     * Remove an environment on the Puppet Master
-     *
-     * @param EnvironmentInterface $environment
-     * @return PmProxy
+     * @param string $uri
+     * @param array $content
      */
-    public function remove(EnvironmentInterface $environment)
+    public function put($uri, $content)
     {
-        $this->send(Request::METHOD_DELETE, '/environments/' . $environment->getId());
-        if ($environment->hasChildren()) {
-            foreach ($environment->getChildren() as $child) {
-                /** @var EnvironmentInterface $child */
-                $this->send(Request::METHOD_DELETE, '/environments/' . $child->getId());
-            }
-        }
-        return $this;
+        $this->send(Request::METHOD_PUT, $uri, $content);
+    }
+
+    /**
+     * @param string $uri
+     * @param array $content
+     */
+    public function post($uri, $content)
+    {
+        $this->send(Request::METHOD_POST, $uri, $content);
+    }
+
+    /**
+     * @param string $uri
+     */
+    public function delete($uri)
+    {
+        $this->send(Request::METHOD_DELETE, $uri);
     }
 
     /**
      * Set BaseUri.
      *
      * @param string $baseUri
-     * @return PmProxy
+     * @return Client
      */
     public function setBaseUri($baseUri)
     {
@@ -106,32 +96,10 @@ class PmProxy implements PmProxyInterface
     }
 
     /**
-     * Set EnvironmentHydrator.
-     *
-     * @param HydratorInterface $environmentHydrator
-     * @return PmProxy
-     */
-    public function setEnvironmentHydrator($environmentHydrator)
-    {
-        $this->environmentHydrator = $environmentHydrator;
-        return $this;
-    }
-
-    /**
-     * Get EnvironmentHydrator.
-     *
-     * @return HydratorInterface
-     */
-    public function getEnvironmentHydrator()
-    {
-        return $this->environmentHydrator;
-    }
-
-    /**
      * Set HttpClient.
      *
      * @param \Zend\Http\Client $httpClient
-     * @return PmProxy
+     * @return Client
      */
     public function setHttpClient($httpClient)
     {
@@ -153,7 +121,7 @@ class PmProxy implements PmProxyInterface
      * Set Logger.
      *
      * @param \Zend\Log\Logger $logger
-     * @return PmProxy
+     * @return Client
      */
     public function setLogger($logger)
     {
@@ -169,6 +137,46 @@ class PmProxy implements PmProxyInterface
     public function getLogger()
     {
         return $this->logger;
+    }
+
+    /**
+     * @param $method
+     * @param $uri
+     * @param $content
+     * @return mixed
+     * @throws RuntimeException
+     * @throws NotFoundException
+     */
+    protected function send($method, $uri, $content = null)
+    {
+        $request = new Request();
+        $request->setUri($this->getUri($uri));
+        $request->setMethod($method);
+        $headers = new Headers();
+        $headers->addHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ]);
+        $request->setHeaders($headers);
+        if ($content !== null) {
+            $request->setContent(Json::encode($content));
+        }
+
+        $start = microtime(true);
+        $httpResponse = $this->getHttpClient()->send($request);
+        $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
+
+        $body = $httpResponse->getBody();
+        $result = Json::decode(trim($body));
+        $message = $result !== null && !empty($result->message) ? $result->message : $httpResponse->renderStatusLine();
+        if ($httpResponse->isNotFound()) {
+            throw new NotFoundException($message);
+        } elseif (!$httpResponse->isSuccess()) {
+            $this->getLogger()->err('[' . $httpResponse->renderStatusLine() . '] ' . $body);
+            throw new RuntimeException($message);
+        }
+
+        return $result;
     }
 
     /**
@@ -192,43 +200,5 @@ class PmProxy implements PmProxyInterface
         $uriToLog = array_shift($splittedUri);
         $this->getLogger()->debug("[$duration ms] [" . $statusLine . "] $uriToLog");
 //        $this->getLogger()->debug("[$duration ms] [" . $statusLine . "] $uri");
-    }
-
-    /**
-     * @param $method
-     * @param $uri
-     * @param $content
-     * @return PmProxy
-     * @throws RuntimeException
-     * @throws NotFoundException
-     */
-    protected function send($method, $uri, $content = '')
-    {
-        $request = new Request();
-        $request->setUri($this->getUri($uri));
-        $request->setMethod($method);
-        $headers = new Headers();
-        $headers->addHeaders([
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-        ]);
-        $request->setHeaders($headers);
-        $request->setContent($content);
-
-        $start = microtime(true);
-        $httpResponse = $this->getHttpClient()->send($request);
-        $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
-
-        $body = $httpResponse->getBody();
-        $result = Json::decode(trim($body));
-        $message = $result !== null && !empty($result->message) ? $result->message : $httpResponse->renderStatusLine();
-        if ($httpResponse->isNotFound()) {
-            throw new NotFoundException($message);
-        } elseif (!$httpResponse->isSuccess()) {
-            $this->getLogger()->err('[' . $httpResponse->renderStatusLine() . '] ' . $body);
-            throw new RuntimeException($message);
-        }
-
-        return $this;
     }
 }
