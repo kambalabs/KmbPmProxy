@@ -50,6 +50,16 @@ class Module
     protected $classes;
 
     /**
+     * @param string $name
+     * @param string $version
+     */
+    public function __construct($name = null, $version = null)
+    {
+        $this->setName($name);
+        $this->setVersion($version);
+    }
+
+    /**
      * Set Name.
      *
      * @param string $name

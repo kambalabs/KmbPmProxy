@@ -14,5 +14,8 @@ return [
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
+        'aliases' => [
+            'pmProxyModuleService' => 'KmbPmProxy\Service\Module',
+        ],
     ],
 ];
