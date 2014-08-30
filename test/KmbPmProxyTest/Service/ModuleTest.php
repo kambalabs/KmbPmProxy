@@ -33,19 +33,46 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     {
         $environment = new Environment();
         $environment->setId(1);
+
         $modules = $this->moduleService->getAllByEnvironment($environment);
 
         $this->assertEquals(1, count($modules));
-        /** @var Module $firstModule */
-        $firstModule = $modules[0];
-        $this->assertInstanceOf('KmbPmProxy\Model\Module', $firstModule);
-        $this->assertEquals('apache', $firstModule->getName());
-        $classes = $firstModule->getClasses();
+        /** @var Module $module */
+        $module = $modules['apache'];
+        $this->assertInstanceOf('KmbPmProxy\Model\Module', $module);
+        $this->assertEquals('apache', $module->getName());
+        $classes = $module->getClasses();
         $this->assertEquals(1, count($classes));
         /** @var PuppetClass $firtClass */
         $firtClass = $classes[0];
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetClass', $firtClass);
         $this->assertEquals('apache::vhost', $firtClass->getName());
+    }
+
+    /** @test */
+    public function cannotGetUnknownModuleByEnvironmentAndName()
+    {
+        $environment = new Environment();
+        $environment->setId(1);
+
+        $module = $this->moduleService->getByEnvironmentAndName($environment, 'unknown');
+
+        $this->assertNull($module);
+    }
+
+    /** @test */
+    public function canGetByEnvironmentAndName()
+    {
+        $environment = new Environment();
+        $environment->setId(1);
+
+        $module = $this->moduleService->getByEnvironmentAndName($environment, 'apache');
+
+        /** @var Module $module */
+        $this->assertInstanceOf('KmbPmProxy\Model\Module', $module);
+        $this->assertEquals('apache', $module->getName());
+        $classes = $module->getClasses();
+        $this->assertEquals(1, count($classes));
     }
 
     /**

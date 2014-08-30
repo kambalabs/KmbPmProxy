@@ -21,8 +21,10 @@
 namespace KmbPmProxy\Service;
 
 use KmbDomain\Model;
+use KmbDomain;
 use KmbPmProxy\ClientInterface;
 use KmbPmProxy\Options\ModuleServiceOptionsInterface;
+use KmbPmProxy;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class Module implements ModuleInterface
@@ -58,9 +60,20 @@ class Module implements ModuleInterface
                 $puppetClass = new $classEntityClassName();
                 $classes[] = $this->getClassHydrator()->hydrate((array)$classData, $puppetClass);
             }
-            $modules[] = $module->setClasses($classes);
+            $modules[$module->getName()] = $module->setClasses($classes);
         }
         return $modules;
+    }
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param string                               $name
+     * @return KmbPmProxy\Model\Module
+     */
+    public function getByEnvironmentAndName(KmbDomain\Model\EnvironmentInterface $environment, $name)
+    {
+        $modules = $this->getAllByEnvironment($environment);
+        return isset($modules[$name]) ? $modules[$name] : null;
     }
 
     /**

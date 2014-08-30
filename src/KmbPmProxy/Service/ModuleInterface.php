@@ -30,4 +30,11 @@ interface ModuleInterface
      * @return KmbPmProxy\Model\Module[]
      */
     public function getAllByEnvironment(KmbDomain\Model\EnvironmentInterface $environment);
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param string                               $name
+     * @return KmbPmProxy\Model\Module
+     */
+    public function getByEnvironmentAndName(KmbDomain\Model\EnvironmentInterface $environment, $name);
 }

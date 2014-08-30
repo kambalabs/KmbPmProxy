@@ -256,4 +256,12 @@ class Module
     {
         return $this->classes;
     }
+
+    /**
+     * @return bool
+     */
+    public function hasClasses()
+    {
+        return count($this->classes) > 0;
+    }
 }
