@@ -258,10 +258,37 @@ class Module
     }
 
     /**
+     * Get Class.
+     *
+     * @param string $name
+     * @return \KmbPmProxy\Model\PuppetClass
+     */
+    public function getClass($name)
+    {
+        if ($this->hasClasses()) {
+            foreach ($this->getClasses() as $class) {
+                if ($class->getName() === $name) {
+                    return $class;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * @return bool
      */
     public function hasClasses()
     {
         return count($this->classes) > 0;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasClass($name)
+    {
+        return $this->getClass($name) !== null;
     }
 }

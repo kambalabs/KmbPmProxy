@@ -22,9 +22,19 @@ namespace KmbPmProxy;
 
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\Validator\AbstractValidator;
 
 class Module implements AutoloaderProviderInterface, ConfigProviderInterface
 {
+    public function onBootstrap(MvcEvent $e)
+    {
+        $serviceManager = $e->getApplication()->getServiceManager();
+        if ($serviceManager->has('translator')) {
+            AbstractValidator::setDefaultTranslator($serviceManager->get('translator'));
+        }
+    }
+
     public function getConfig()
     {
         return include dirname(dirname(__DIR__)) . '/config/module.config.php';

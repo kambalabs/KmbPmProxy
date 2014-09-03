@@ -28,11 +28,18 @@ class PuppetClass
     /** @var string */
     protected $documentation;
 
-    /** @var array */
+    /** @var \stdClass[] */
     protected $parametersDefinitions;
 
-    /** @var array */
+    /** @var \stdClass[] */
     protected $parametersTemplates;
+
+    public function __construct($name = null, $parametersTemplates = null, $parametersDefinitions = null)
+    {
+        $this->setName($name);
+        $this->setParametersTemplates($parametersTemplates);
+        $this->setParametersDefinitions($parametersDefinitions);
+    }
 
     /**
      * Set Name.
@@ -81,7 +88,7 @@ class PuppetClass
     /**
      * Set ParametersDefinitions.
      *
-     * @param array $parametersDefinitions
+     * @param \stdClass[] $parametersDefinitions
      * @return PuppetClass
      */
     public function setParametersDefinitions($parametersDefinitions)
@@ -93,7 +100,7 @@ class PuppetClass
     /**
      * Get ParametersDefinitions.
      *
-     * @return array
+     * @return \stdClass[]
      */
     public function getParametersDefinitions()
     {
@@ -101,9 +108,44 @@ class PuppetClass
     }
 
     /**
+     * Get specified parameter definition.
+     *
+     * @param string $name
+     * @return \stdClass
+     */
+    public function getParameterDefinition($name)
+    {
+        if ($this->hasParametersDefinitions()) {
+            foreach ($this->getParametersDefinitions() as $parameterDefinition) {
+                if ($parameterDefinition->name === $name) {
+                    return $parameterDefinition;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParametersDefinitions()
+    {
+        return count($this->parametersDefinitions) > 0;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasParameterDefinition($name)
+    {
+        return $this->getParameterDefinition($name) !== null;
+    }
+
+    /**
      * Set ParametersTemplates.
      *
-     * @param array $parametersTemplates
+     * @param \stdClass[] $parametersTemplates
      * @return PuppetClass
      */
     public function setParametersTemplates($parametersTemplates)
@@ -115,10 +157,45 @@ class PuppetClass
     /**
      * Get ParametersTemplates.
      *
-     * @return array
+     * @return \stdClass[]
      */
     public function getParametersTemplates()
     {
         return $this->parametersTemplates;
+    }
+
+    /**
+     * Get specified parameter template.
+     *
+     * @param string $name
+     * @return \stdClass
+     */
+    public function getParameterTemplate($name)
+    {
+        if ($this->hasParametersTemplates()) {
+            foreach ($this->getParametersTemplates() as $parameterTemplate) {
+                if ($parameterTemplate->name === $name) {
+                    return $parameterTemplate;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasParametersTemplates()
+    {
+        return count($this->parametersTemplates) > 0;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasParameterTemplate($name)
+    {
+        return $this->getParameterTemplate($name) !== null;
     }
 }

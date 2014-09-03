@@ -4,6 +4,7 @@ return [
         'invokables' => [
             'KmbPmProxy\Http\Client' => 'Zend\Http\Client',
             'KmbPmProxy\Model\EnvironmentHydrator' => 'KmbPmProxy\Model\EnvironmentHydrator',
+            'KmbPmProxy\Model\PuppetClassValidator' => 'KmbPmProxy\Model\PuppetClassValidator',
         ],
         'factories' => [
             'KmbPmProxy\Client' => 'KmbPmProxy\ClientFactory',
@@ -16,6 +17,18 @@ return [
         ],
         'aliases' => [
             'pmProxyModuleService' => 'KmbPmProxy\Service\Module',
+        ],
+        'shared' => [
+            'KmbPmProxy\Model\PuppetClassValidator' => false,
+        ],
+    ],
+    'translator' => [
+        'translation_file_patterns' => [
+            [
+                'type' => 'gettext',
+                'base_dir' => __DIR__ . '/../language',
+                'pattern' => '%s.mo',
+            ],
         ],
     ],
 ];
