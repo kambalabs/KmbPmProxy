@@ -155,6 +155,16 @@ class PuppetClass
     }
 
     /**
+     * @param \stdClass $parameterTemplate
+     * @return PuppetClass
+     */
+    public function addParameterTemplate($parameterTemplate)
+    {
+        $this->parametersTemplates[] = $parameterTemplate;
+        return $this;
+    }
+
+    /**
      * Get ParametersTemplates.
      *
      * @return \stdClass[]
