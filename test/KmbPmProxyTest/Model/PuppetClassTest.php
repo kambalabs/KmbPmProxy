@@ -1,7 +1,7 @@
 <?php
 namespace KmbPmProxyTest\Model;
 
-use KmbPmProxy\Model\ParameterType;
+use KmbDomain\Model\ParameterType;
 use KmbPmProxy\Model\PuppetClass;
 
 class PuppetClassTest extends \PHPUnit_Framework_TestCase
