@@ -11,12 +11,14 @@ return [
             'KmbPmProxy\Options\ModuleOptions' => 'KmbPmProxy\Options\ModuleOptionsFactory',
             'KmbPmProxy\Service\Environment' => 'KmbPmProxy\Service\EnvironmentFactory',
             'KmbPmProxy\Service\Module' => 'KmbPmProxy\Service\ModuleFactory',
+            'KmbPmProxy\Service\PuppetClass' => 'KmbPmProxy\Service\PuppetClassFactory',
         ],
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
         'aliases' => [
             'pmProxyModuleService' => 'KmbPmProxy\Service\Module',
+            'pmProxyPuppetClassService' => 'KmbPmProxy\Service\PuppetClass',
         ],
         'shared' => [
             'KmbPmProxy\Model\PuppetClassValidator' => false,

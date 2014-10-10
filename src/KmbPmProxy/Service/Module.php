@@ -43,7 +43,7 @@ class Module implements ModuleInterface
 
     /**
      * @param Model\EnvironmentInterface $environment
-     * @return Module[]
+     * @return KmbPmProxy\Model\Module[]
      */
     public function getAllByEnvironment(Model\EnvironmentInterface $environment)
     {
