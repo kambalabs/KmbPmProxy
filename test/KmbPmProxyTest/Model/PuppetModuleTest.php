@@ -1,24 +1,24 @@
 <?php
 namespace KmbPmProxyTest\Model;
 
-use KmbPmProxy\Model\Module;
+use KmbPmProxy\Model\PuppetModule;
 use KmbPmProxy\Model\PuppetClass;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var Module */
+    /** @var PuppetModule */
     protected $module;
 
     protected function setUp()
     {
-        $this->module = new Module('apache', '1.0.0');
+        $this->module = new PuppetModule('apache', '1.0.0');
         $this->module->setClasses([new PuppetClass('apache::vhost')]);
     }
 
     /** @test */
     public function canCheckIfHasNotClass()
     {
-        $module = new Module('apache', '1.0.0');
+        $module = new PuppetModule('apache', '1.0.0');
 
         $this->assertFalse($module->hasClass('unknown'));
     }
@@ -32,7 +32,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function cannotGetUnknownClass()
     {
-        $module = new Module('apache', '1.0.0');
+        $module = new PuppetModule('apache', '1.0.0');
 
         $this->assertNull($module->getClass('unknown'));
     }

@@ -10,14 +10,14 @@ return [
             'KmbPmProxy\Client' => 'KmbPmProxy\ClientFactory',
             'KmbPmProxy\Options\ModuleOptions' => 'KmbPmProxy\Options\ModuleOptionsFactory',
             'KmbPmProxy\Service\Environment' => 'KmbPmProxy\Service\EnvironmentFactory',
-            'KmbPmProxy\Service\Module' => 'KmbPmProxy\Service\ModuleFactory',
+            'KmbPmProxy\Service\PuppetModule' => 'KmbPmProxy\Service\PuppetModuleFactory',
             'KmbPmProxy\Service\PuppetClass' => 'KmbPmProxy\Service\PuppetClassFactory',
         ],
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
         'aliases' => [
-            'pmProxyModuleService' => 'KmbPmProxy\Service\Module',
+            'pmProxyPuppetModuleService' => 'KmbPmProxy\Service\PuppetModule',
             'pmProxyPuppetClassService' => 'KmbPmProxy\Service\PuppetClass',
         ],
         'shared' => [

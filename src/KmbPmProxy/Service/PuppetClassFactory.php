@@ -35,8 +35,8 @@ class PuppetClassFactory implements FactoryInterface
     {
         $service = new PuppetClass();
 
-        /** @var Module $moduleService */
-        $moduleService = $serviceLocator->get('pmProxyModuleService');
+        /** @var PuppetModule $moduleService */
+        $moduleService = $serviceLocator->get('pmProxyPuppetModuleService');
         $service->setModuleService($moduleService);
 
         return $service;

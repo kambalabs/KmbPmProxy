@@ -13,6 +13,6 @@ class PuppetClassFactoryTest extends \PHPUnit_Framework_TestCase
         $service = Bootstrap::getServiceManager()->get('pmProxyPuppetClassService');
 
         $this->assertInstanceOf('KmbPmProxy\Service\PuppetClassInterface', $service);
-        $this->assertInstanceOf('KmbPmProxy\Service\ModuleInterface', $service->getModuleService());
+        $this->assertInstanceOf('KmbPmProxy\Service\PuppetModuleInterface', $service->getModuleService());
     }
 }

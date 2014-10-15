@@ -23,16 +23,16 @@ namespace KmbPmProxy\Service;
 use KmbDomain\Model;
 use KmbDomain;
 use KmbPmProxy\ClientInterface;
-use KmbPmProxy\Options\ModuleServiceOptionsInterface;
+use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
 use KmbPmProxy;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class Module implements ModuleInterface
+class PuppetModule implements PuppetModuleInterface
 {
     /** @var ClientInterface */
     protected $pmProxyClient;
 
-    /** @var ModuleServiceOptionsInterface */
+    /** @var PuppetModuleServiceOptionsInterface */
     protected $options;
 
     /** @var HydratorInterface */
@@ -43,20 +43,20 @@ class Module implements ModuleInterface
 
     /**
      * @param Model\EnvironmentInterface $environment
-     * @return KmbPmProxy\Model\Module[]
+     * @return KmbPmProxy\Model\PuppetModule[]
      */
     public function getAllByEnvironment(Model\EnvironmentInterface $environment)
     {
         $modules = [];
         $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules');
         foreach ($result as $moduleData) {
-            $moduleEntityClassName = $this->getOptions()->getModuleEntityClass();
-            /** @var \KmbPmProxy\Model\Module $module */
+            $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
+            /** @var \KmbPmProxy\Model\PuppetModule $module */
             $module = new $moduleEntityClassName();
             $this->getModuleHydrator()->hydrate((array)$moduleData, $module);
             $classes = [];
             foreach ($moduleData->classes as $classData) {
-                $classEntityClassName = $this->getOptions()->getClassEntityClass();
+                $classEntityClassName = $this->getOptions()->getPuppetClassEntityClass();
                 $puppetClass = new $classEntityClassName();
                 $classes[] = $this->getClassHydrator()->hydrate((array)$classData, $puppetClass);
             }
@@ -68,7 +68,7 @@ class Module implements ModuleInterface
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param string                               $name
-     * @return KmbPmProxy\Model\Module
+     * @return KmbPmProxy\Model\PuppetModule
      */
     public function getByEnvironmentAndName(KmbDomain\Model\EnvironmentInterface $environment, $name)
     {
@@ -80,7 +80,7 @@ class Module implements ModuleInterface
      * Set PmProxyClient.
      *
      * @param \KmbPmProxy\ClientInterface $pmProxyClient
-     * @return Module
+     * @return PuppetModule
      */
     public function setPmProxyClient($pmProxyClient)
     {
@@ -101,8 +101,8 @@ class Module implements ModuleInterface
     /**
      * Set Options.
      *
-     * @param \KmbPmProxy\Options\ModuleServiceOptionsInterface $options
-     * @return Module
+     * @param \KmbPmProxy\Options\PuppetModuleServiceOptionsInterface $options
+     * @return PuppetModule
      */
     public function setOptions($options)
     {
@@ -113,7 +113,7 @@ class Module implements ModuleInterface
     /**
      * Get Options.
      *
-     * @return \KmbPmProxy\Options\ModuleServiceOptionsInterface
+     * @return \KmbPmProxy\Options\PuppetModuleServiceOptionsInterface
      */
     public function getOptions()
     {
@@ -124,7 +124,7 @@ class Module implements ModuleInterface
      * Set ModuleHydrator.
      *
      * @param \Zend\Stdlib\Hydrator\HydratorInterface $moduleHydrator
-     * @return Module
+     * @return PuppetModule
      */
     public function setModuleHydrator($moduleHydrator)
     {
@@ -140,7 +140,7 @@ class Module implements ModuleInterface
     public function getModuleHydrator()
     {
         if ($this->moduleHydrator == null) {
-            $moduleHydratorClass = $this->getOptions()->getModuleHydratorClass();
+            $moduleHydratorClass = $this->getOptions()->getPuppetModuleHydratorClass();
             $this->moduleHydrator = new $moduleHydratorClass;
         }
         return $this->moduleHydrator;
@@ -150,7 +150,7 @@ class Module implements ModuleInterface
      * Set ClassHydrator.
      *
      * @param \Zend\Stdlib\Hydrator\HydratorInterface $classHydrator
-     * @return Module
+     * @return PuppetModule
      */
     public function setClassHydrator($classHydrator)
     {
@@ -166,7 +166,7 @@ class Module implements ModuleInterface
     public function getClassHydrator()
     {
         if ($this->classHydrator == null) {
-            $classHydratorClass = $this->getOptions()->getClassHydratorClass();
+            $classHydratorClass = $this->getOptions()->getPuppetClassHydratorClass();
             $this->classHydrator = new $classHydratorClass;
         }
         return $this->classHydrator;

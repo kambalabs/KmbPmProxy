@@ -23,18 +23,18 @@ namespace KmbPmProxy\Service;
 use KmbDomain;
 use KmbPmProxy;
 
-interface ModuleInterface
+interface PuppetModuleInterface
 {
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
-     * @return KmbPmProxy\Model\Module[]
+     * @return KmbPmProxy\Model\PuppetModule[]
      */
     public function getAllByEnvironment(KmbDomain\Model\EnvironmentInterface $environment);
 
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param string                               $name
-     * @return KmbPmProxy\Model\Module
+     * @return KmbPmProxy\Model\PuppetModule
      */
     public function getByEnvironmentAndName(KmbDomain\Model\EnvironmentInterface $environment, $name);
 }

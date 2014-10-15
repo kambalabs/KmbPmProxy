@@ -1,16 +1,16 @@
 <?php
 namespace KmbPmProxyTest\Model;
 
-use KmbPmProxy\Model\Module;
-use KmbPmProxy\Model\ModuleHydrator;
+use KmbPmProxy\Model\PuppetModule;
+use KmbPmProxy\Model\PuppetModuleHydrator;
 
-class ModuleHydratorTest extends \PHPUnit_Framework_TestCase
+class PuppetModuleHydratorTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
     public function canHydrate()
     {
-        $module = new Module();
-        $hydrator = new ModuleHydrator();
+        $module = new PuppetModule();
+        $hydrator = new PuppetModuleHydrator();
 
         $module = $hydrator->hydrate([
             'name' => 'ntp',

@@ -20,7 +20,7 @@
  */
 namespace KmbPmProxy\Model;
 
-class Module
+class PuppetModule
 {
     /** @var string */
     protected $name;
@@ -63,7 +63,7 @@ class Module
      * Set Name.
      *
      * @param string $name
-     * @return Module
+     * @return PuppetModule
      */
     public function setName($name)
     {
@@ -85,7 +85,7 @@ class Module
      * Set Version.
      *
      * @param string $version
-     * @return Module
+     * @return PuppetModule
      */
     public function setVersion($version)
     {
@@ -107,7 +107,7 @@ class Module
      * Set Source.
      *
      * @param string $source
-     * @return Module
+     * @return PuppetModule
      */
     public function setSource($source)
     {
@@ -129,7 +129,7 @@ class Module
      * Set ProjectPage.
      *
      * @param string $projectPage
-     * @return Module
+     * @return PuppetModule
      */
     public function setProjectPage($projectPage)
     {
@@ -151,7 +151,7 @@ class Module
      * Set IssuesUrl.
      *
      * @param string $issuesUrl
-     * @return Module
+     * @return PuppetModule
      */
     public function setIssuesUrl($issuesUrl)
     {
@@ -173,7 +173,7 @@ class Module
      * Set Author.
      *
      * @param string $author
-     * @return Module
+     * @return PuppetModule
      */
     public function setAuthor($author)
     {
@@ -195,7 +195,7 @@ class Module
      * Set Summary.
      *
      * @param string $summary
-     * @return Module
+     * @return PuppetModule
      */
     public function setSummary($summary)
     {
@@ -217,7 +217,7 @@ class Module
      * Set License.
      *
      * @param string $license
-     * @return Module
+     * @return PuppetModule
      */
     public function setLicense($license)
     {
@@ -239,7 +239,7 @@ class Module
      * Set Classes.
      *
      * @param \KmbPmProxy\Model\PuppetClass[] $classes
-     * @return Module
+     * @return PuppetModule
      */
     public function setClasses($classes)
     {

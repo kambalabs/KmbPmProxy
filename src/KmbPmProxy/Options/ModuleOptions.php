@@ -22,7 +22,7 @@ namespace KmbPmProxy\Options;
 
 use Zend\Stdlib\AbstractOptions;
 
-class ModuleOptions extends AbstractOptions implements ClientOptionsInterface, ModuleServiceOptionsInterface
+class ModuleOptions extends AbstractOptions implements ClientOptionsInterface, PuppetModuleServiceOptionsInterface
 {
     /**
      * Turn off strict options mode
@@ -42,22 +42,22 @@ class ModuleOptions extends AbstractOptions implements ClientOptionsInterface, M
     /**
      * @var string
      */
-    protected $moduleEntityClass = 'KmbPmProxy\Model\Module';
+    protected $puppetModuleEntityClass = 'KmbPmProxy\Model\PuppetModule';
 
     /**
      * @var string
      */
-    protected $classEntityClass = 'KmbPmProxy\Model\PuppetClass';
+    protected $puppetClassEntityClass = 'KmbPmProxy\Model\PuppetClass';
 
     /**
      * @var string
      */
-    protected $moduleHydratorClass = 'KmbPmProxy\Model\ModuleHydrator';
+    protected $puppetModuleHydratorClass = 'KmbPmProxy\Model\PuppetModuleHydrator';
 
     /**
      * @var string
      */
-    protected $classHydratorClass = 'KmbPmProxy\Model\PuppetClassHydrator';
+    protected $puppetClassHydratorClass = 'KmbPmProxy\Model\PuppetClassHydrator';
 
     /**
      * Set PmProxy base URI.
@@ -105,90 +105,90 @@ class ModuleOptions extends AbstractOptions implements ClientOptionsInterface, M
     }
 
     /**
-     * Set module entity class name.
+     * Set puppet module entity class name.
      *
-     * @param string $moduleEntityClass
-     * @return ModuleServiceOptionsInterface
+     * @param string $puppetModuleEntityClass
+     * @return PuppetModuleServiceOptionsInterface
      */
-    public function setModuleEntityClass($moduleEntityClass)
+    public function setPuppetModuleEntityClass($puppetModuleEntityClass)
     {
-        $this->moduleEntityClass = $moduleEntityClass;
+        $this->puppetModuleEntityClass = $puppetModuleEntityClass;
         return $this;
     }
 
     /**
-     * Get module entity class name.
+     * Get puppet module entity class name.
      *
      * @return string
      */
-    public function getModuleEntityClass()
+    public function getPuppetModuleEntityClass()
     {
-        return $this->moduleEntityClass;
+        return $this->puppetModuleEntityClass;
     }
 
     /**
-     * Set module hydrator class name.
+     * Set puppet module hydrator class name.
      *
-     * @param string $moduleHydratorClass
-     * @return ModuleServiceOptionsInterface
+     * @param string $puppetModuleHydratorClass
+     * @return PuppetModuleServiceOptionsInterface
      */
-    public function setModuleHydratorClass($moduleHydratorClass)
+    public function setPuppetModuleHydratorClass($puppetModuleHydratorClass)
     {
-        $this->moduleHydratorClass = $moduleHydratorClass;
+        $this->puppetModuleHydratorClass = $puppetModuleHydratorClass;
         return $this;
     }
 
     /**
-     * Get module hydrator class name.
+     * Get puppet module hydrator class name.
      *
      * @return string
      */
-    public function getModuleHydratorClass()
+    public function getPuppetModuleHydratorClass()
     {
-        return $this->moduleHydratorClass;
+        return $this->puppetModuleHydratorClass;
     }
 
     /**
-     * Set class entity class name.
+     * Set puppet class entity class name.
      *
-     * @param string $classEntityClass
-     * @return ModuleServiceOptionsInterface
+     * @param string $puppetClassEntityClass
+     * @return PuppetModuleServiceOptionsInterface
      */
-    public function setClassEntityClass($classEntityClass)
+    public function setPuppetClassEntityClass($puppetClassEntityClass)
     {
-        $this->classEntityClass = $classEntityClass;
+        $this->puppetClassEntityClass = $puppetClassEntityClass;
         return $this;
     }
 
     /**
-     * Get class entity class name.
+     * Get puppet class entity class name.
      *
      * @return string
      */
-    public function getClassEntityClass()
+    public function getPuppetClassEntityClass()
     {
-        return $this->classEntityClass;
+        return $this->puppetClassEntityClass;
     }
 
     /**
-     * Set class hydrator class name.
+     * Set puppet class hydrator class name.
      *
-     * @param string $classHydratorClass
-     * @return ModuleServiceOptionsInterface
+     * @param string $puppetClassHydratorClass
+     * @return PuppetModuleServiceOptionsInterface
      */
-    public function setClassHydratorClass($classHydratorClass)
+    public function setPuppetClassHydratorClass($puppetClassHydratorClass)
     {
-        $this->classHydratorClass = $classHydratorClass;
+        $this->puppetClassHydratorClass = $puppetClassHydratorClass;
         return $this;
     }
 
     /**
-     * Get class hydrator class name.
+     * Get puppet class hydrator class name.
      *
      * @return string
      */
-    public function getClassHydratorClass()
+    public function getPuppetClassHydratorClass()
     {
-        return $this->classHydratorClass;
+        return $this->puppetClassHydratorClass;
     }
 }

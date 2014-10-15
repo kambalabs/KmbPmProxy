@@ -1,18 +1,18 @@
 <?php
 namespace KmbPmProxyTest\Service;
 
-use KmbPmProxy\Service\Module;
+use KmbPmProxy\Service\PuppetModule;
 use KmbPmProxyTest\Bootstrap;
 
-class ModuleFactoryTest extends \PHPUnit_Framework_TestCase
+class PuppetModuleFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /** @test */
     public function canCreateService()
     {
-        /** @var Module $service */
-        $service = Bootstrap::getServiceManager()->get('KmbPmProxy\Service\Module');
+        /** @var PuppetModule $service */
+        $service = Bootstrap::getServiceManager()->get('KmbPmProxy\Service\PuppetModule');
 
-        $this->assertInstanceOf('KmbPmProxy\Service\Module', $service);
+        $this->assertInstanceOf('KmbPmProxy\Service\PuppetModule', $service);
         $this->assertInstanceOf('KmbPmProxy\Client', $service->getPmProxyClient());
         $this->assertInstanceOf('KmbPmProxy\Options\ModuleOptions', $service->getOptions());
     }

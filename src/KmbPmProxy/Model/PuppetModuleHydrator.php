@@ -22,12 +22,12 @@ namespace KmbPmProxy\Model;
 
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class ModuleHydrator implements HydratorInterface
+class PuppetModuleHydrator implements HydratorInterface
 {
     /**
      * Extract values from an object
      *
-     * @param  Module $object
+     * @param  PuppetModule $object
      * @return array
      */
     public function extract($object)
@@ -38,8 +38,8 @@ class ModuleHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param  array  $data
-     * @param  Module $object
-     * @return Module
+     * @param  PuppetModule $object
+     * @return PuppetModule
      */
     public function hydrate(array $data, $object)
     {

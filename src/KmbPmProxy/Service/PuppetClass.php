@@ -26,7 +26,7 @@ use KmbPmProxy;
 
 class PuppetClass implements PuppetClassInterface
 {
-    /** @var KmbPmProxy\Service\Module */
+    /** @var KmbPmProxy\Service\PuppetModule */
     protected $moduleService;
 
     /**
@@ -49,7 +49,7 @@ class PuppetClass implements PuppetClassInterface
     /**
      * Set ModuleService.
      *
-     * @param \KmbPmProxy\Service\Module $moduleService
+     * @param \KmbPmProxy\Service\PuppetModule $moduleService
      * @return PuppetClass
      */
     public function setModuleService($moduleService)
@@ -61,7 +61,7 @@ class PuppetClass implements PuppetClassInterface
     /**
      * Get ModuleService.
      *
-     * @return \KmbPmProxy\Service\Module
+     * @return \KmbPmProxy\Service\PuppetModule
      */
     public function getModuleService()
     {

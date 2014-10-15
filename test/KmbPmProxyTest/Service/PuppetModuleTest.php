@@ -2,13 +2,13 @@
 namespace KmbPmProxyTest\Service;
 
 use KmbDomain\Model\Environment;
-use KmbPmProxy\Model\Module;
+use KmbPmProxy\Model\PuppetModule;
 use KmbPmProxy\Model\PuppetClass;
 use KmbPmProxy\Options\ModuleOptions;
 use KmbPmProxy\Service;
 use Zend\Json\Json;
 
-class ModuleTest extends \PHPUnit_Framework_TestCase
+class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -16,16 +16,16 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
     private $pmProxyClientMock;
 
     /**
-     * @var Service\Module
+     * @var Service\PuppetModule
      */
-    private $moduleService;
+    private $puppetModuleService;
 
     protected function setUp()
     {
         $this->pmProxyClientMock = $this->createClientMock();
-        $this->moduleService = new Service\Module();
-        $this->moduleService->setOptions(new ModuleOptions());
-        $this->moduleService->setPmProxyClient($this->pmProxyClientMock);
+        $this->puppetModuleService = new Service\PuppetModule();
+        $this->puppetModuleService->setOptions(new ModuleOptions());
+        $this->puppetModuleService->setPmProxyClient($this->pmProxyClientMock);
     }
 
     /** @test */
@@ -34,12 +34,12 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $modules = $this->moduleService->getAllByEnvironment($environment);
+        $modules = $this->puppetModuleService->getAllByEnvironment($environment);
 
         $this->assertEquals(1, count($modules));
-        /** @var Module $module */
+        /** @var PuppetModule $module */
         $module = $modules['apache'];
-        $this->assertInstanceOf('KmbPmProxy\Model\Module', $module);
+        $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
         $this->assertEquals('apache', $module->getName());
         $classes = $module->getClasses();
         $this->assertEquals(1, count($classes));
@@ -55,7 +55,7 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $module = $this->moduleService->getByEnvironmentAndName($environment, 'unknown');
+        $module = $this->puppetModuleService->getByEnvironmentAndName($environment, 'unknown');
 
         $this->assertNull($module);
     }
@@ -66,10 +66,10 @@ class ModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $module = $this->moduleService->getByEnvironmentAndName($environment, 'apache');
+        $module = $this->puppetModuleService->getByEnvironmentAndName($environment, 'apache');
 
-        /** @var Module $module */
-        $this->assertInstanceOf('KmbPmProxy\Model\Module', $module);
+        /** @var PuppetModule $module */
+        $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
         $this->assertEquals('apache', $module->getName());
         $classes = $module->getClasses();
         $this->assertEquals(1, count($classes));

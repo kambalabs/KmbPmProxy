@@ -21,11 +21,11 @@
 namespace KmbPmProxy\Service;
 
 use KmbPmProxy\ClientInterface;
-use KmbPmProxy\Options\ModuleServiceOptionsInterface;
+use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ModuleFactory implements FactoryInterface
+class PuppetModuleFactory implements FactoryInterface
 {
     /**
      * Create service
@@ -35,13 +35,13 @@ class ModuleFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $service = new Module();
+        $service = new PuppetModule();
 
         /** @var ClientInterface $pmProxyClient */
         $pmProxyClient = $serviceLocator->get('KmbPmProxy\Client');
         $service->setPmProxyClient($pmProxyClient);
 
-        /** @var ModuleServiceOptionsInterface $options */
+        /** @var PuppetModuleServiceOptionsInterface $options */
         $options = $serviceLocator->get('KmbPmProxy\Options\ModuleOptions');
         $service->setOptions($options);
 
