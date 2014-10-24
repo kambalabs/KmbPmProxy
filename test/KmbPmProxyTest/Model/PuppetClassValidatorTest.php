@@ -1,7 +1,7 @@
 <?php
 namespace KmbPmProxyTest\Model;
 
-use KmbDomain\Model\ParameterType;
+use KmbDomain\Model\GroupParameterType;
 use KmbPmProxy\Model\PuppetClass;
 use KmbPmProxy\Model\PuppetClassValidator;
 
@@ -14,7 +14,7 @@ class PuppetClassValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $class = new PuppetClass(
             'apache::vhost',
-            [$this->createParameter('hostname', true, false, ParameterType::STRING)],
+            [$this->createParameter('hostname', true, false, GroupParameterType::STRING)],
             [$this->createParameter('hostname', true)]
         );
         $validator = new PuppetClassValidator();
@@ -28,9 +28,9 @@ class PuppetClassValidatorTest extends \PHPUnit_Framework_TestCase
         $class = new PuppetClass(
             'apache::vhost',
             [
-                $this->createParameter('hostname', false, false, ParameterType::STRING),
-                $this->createParameter('port', true, false, ParameterType::STRING),
-                $this->createParameter('document_root', true, false, ParameterType::STRING),
+                $this->createParameter('hostname', false, false, GroupParameterType::STRING),
+                $this->createParameter('port', true, false, GroupParameterType::STRING),
+                $this->createParameter('document_root', true, false, GroupParameterType::STRING),
             ],
             [
                 $this->createParameter('hostname', true),

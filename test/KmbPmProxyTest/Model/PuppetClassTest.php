@@ -1,7 +1,7 @@
 <?php
 namespace KmbPmProxyTest\Model;
 
-use KmbDomain\Model\ParameterType;
+use KmbDomain\Model\GroupParameterType;
 use KmbPmProxy\Model\PuppetClass;
 
 class PuppetClassTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +19,7 @@ class PuppetClassTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->parameterTemplate = $this->createParameter('hostname', true, false, ParameterType::STRING);
+        $this->parameterTemplate = $this->createParameter('hostname', true, false, GroupParameterType::STRING);
         $this->parameterDefinition = $this->createParameter('hostname', true);
         $this->class = new PuppetClass('apache::vhost', [$this->parameterTemplate], [$this->parameterDefinition]);
     }
