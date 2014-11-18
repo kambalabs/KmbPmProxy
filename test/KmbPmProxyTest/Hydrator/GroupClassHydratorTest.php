@@ -1,9 +1,9 @@
 <?php
 namespace KmbPmProxyTest\Hydrator;
 
+use KmbDomain\Model\GroupClass;
 use KmbDomain\Model\GroupParameter;
 use KmbDomain\Model\GroupParameterType;
-use KmbDomain\Model\GroupClass;
 use KmbPmProxy\Hydrator\GroupClassHydrator;
 use KmbPmProxy\Hydrator\GroupParameterHydrator;
 use Zend\Json\Json;

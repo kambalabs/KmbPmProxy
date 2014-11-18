@@ -14,6 +14,8 @@ return [
             'KmbPmProxy\Service\PuppetModule' => 'KmbPmProxy\Service\PuppetModuleFactory',
             'KmbPmProxy\Service\PuppetClass' => 'KmbPmProxy\Service\PuppetClassFactory',
             'KmbPmProxy\Hydrator\GroupClassHydrator' => 'KmbPmProxy\Hydrator\GroupClassHydratorFactory',
+            'KmbPmProxy\Hydrator\GroupHydrator' => 'KmbPmProxy\Hydrator\GroupHydratorFactory',
+            'KmbPmProxy\Hydrator\RevisionHydrator' => 'KmbPmProxy\Hydrator\RevisionHydratorFactory',
         ],
         'abstract_factories' => [
             'Zend\Log\LoggerAbstractServiceFactory',
@@ -23,6 +25,8 @@ return [
             'pmProxyPuppetClassService' => 'KmbPmProxy\Service\PuppetClass',
             'pmProxyGroupParameterHydrator' => 'KmbPmProxy\Hydrator\GroupParameterHydrator',
             'pmProxyGroupClassHydrator' => 'KmbPmProxy\Hydrator\GroupClassHydrator',
+            'pmProxyGroupHydrator' => 'KmbPmProxy\Hydrator\GroupHydrator',
+            'pmProxyRevisionHydrator' => 'KmbPmProxy\Hydrator\RevisionHydrator',
         ],
         'shared' => [
             'KmbPmProxy\Validator\PuppetClassValidator' => false,
