@@ -23,11 +23,8 @@ namespace KmbPmProxy\Hydrator;
 use KmbDomain\Model\RevisionInterface;
 use KmbPmProxy\Model\PuppetModule;
 
-class RevisionHydrator implements RevisionHydratorInterface
+interface RevisionHydratorInterface
 {
-    /** @var  GroupHydratorInterface */
-    protected $groupHydrator;
-
     /**
      * Hydrate revision with the provided puppet modules data.
      *
@@ -35,34 +32,5 @@ class RevisionHydrator implements RevisionHydratorInterface
      * @param  RevisionInterface $revision
      * @return RevisionInterface
      */
-    public function hydrate($puppetModules, $revision)
-    {
-        if ($revision->hasGroups()) {
-            foreach ($revision->getGroups() as $group) {
-                $this->groupHydrator->hydrate($puppetModules, $group);
-            }
-        }
-    }
-
-    /**
-     * Set GroupHydrator.
-     *
-     * @param \KmbPmProxy\Hydrator\GroupHydratorInterface $groupHydrator
-     * @return GroupHydrator
-     */
-    public function setGroupHydrator($groupHydrator)
-    {
-        $this->groupHydrator = $groupHydrator;
-        return $this;
-    }
-
-    /**
-     * Get GroupHydrator.
-     *
-     * @return \KmbPmProxy\Hydrator\GroupHydratorInterface
-     */
-    public function getGroupHydrator()
-    {
-        return $this->groupHydrator;
-    }
+    public function hydrate($puppetModules, $revision);
 }
