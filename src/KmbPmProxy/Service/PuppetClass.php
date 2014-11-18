@@ -29,6 +29,9 @@ class PuppetClass implements PuppetClassInterface
     /** @var KmbPmProxy\Service\PuppetModule */
     protected $moduleService;
 
+    /** @var  array */
+    protected $classes = [];
+
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param string                               $name
@@ -36,14 +39,23 @@ class PuppetClass implements PuppetClassInterface
      */
     public function getByEnvironmentAndName(KmbDomain\Model\EnvironmentInterface $environment, $name)
     {
-        $modules = $this->moduleService->getAllByEnvironment($environment);
-        foreach ($modules as $module) {
-            $puppetClass = $module->getClass($name);
-            if ($puppetClass !== null) {
-                return $puppetClass;
+        $classes = $this->getAllClasses($environment);
+        return isset($classes[$name]) ? $classes[$name] : null;
+    }
+
+    protected function getAllClasses(KmbDomain\Model\EnvironmentInterface $environment)
+    {
+        $envKey = $environment->getNormalizedName();
+        if (!isset($this->classes[$envKey])) {
+            $modules = $this->moduleService->getAllByEnvironment($environment);
+            $this->classes[$envKey] = [];
+            foreach ($modules as $module) {
+                foreach ($module->getClasses() as $class) {
+                    $this->classes[$envKey][$class->getName()] = $class;
+                }
             }
         }
-        return null;
+        return $this->classes[$envKey];
     }
 
     /**
