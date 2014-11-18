@@ -2,7 +2,7 @@
 namespace KmbPmProxyTest\Service;
 
 use KmbDomain\Model;
-use KmbPmProxy\Model\EnvironmentHydrator;
+use KmbPmProxy\Hydrator\EnvironmentHydrator;
 use KmbPmProxy\Service;
 use Zend\Log\Logger;
 

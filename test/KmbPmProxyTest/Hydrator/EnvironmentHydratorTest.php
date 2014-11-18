@@ -1,8 +1,8 @@
 <?php
-namespace KmbPmProxyTest\Model;
+namespace KmbPmProxyTest\Hydrator;
 
 use KmbDomain\Model\Environment;
-use KmbPmProxy\Model\EnvironmentHydrator;
+use KmbPmProxy\Hydrator\EnvironmentHydrator;
 
 class EnvironmentHydratorTest extends \PHPUnit_Framework_TestCase
 {

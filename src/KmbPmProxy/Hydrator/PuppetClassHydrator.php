@@ -18,16 +18,17 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Model;
+namespace KmbPmProxy\Hydrator;
 
+use KmbPmProxy\Model\PuppetClass;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class PuppetModuleHydrator implements HydratorInterface
+class PuppetClassHydrator implements HydratorInterface
 {
     /**
      * Extract values from an object
      *
-     * @param  PuppetModule $object
+     * @param  PuppetClass $object
      * @return array
      */
     public function extract($object)
@@ -38,34 +39,22 @@ class PuppetModuleHydrator implements HydratorInterface
      * Hydrate $object with the provided $data.
      *
      * @param  array  $data
-     * @param  PuppetModule $object
-     * @return PuppetModule
+     * @param  PuppetClass $object
+     * @return PuppetClass
      */
     public function hydrate(array $data, $object)
     {
         if (isset($data['name'])) {
             $object->setName($data['name']);
         }
-        if (isset($data['version'])) {
-            $object->setVersion($data['version']);
+        if (isset($data['doc'])) {
+            $object->setDocumentation($data['doc']);
         }
-        if (isset($data['source'])) {
-            $object->setSource($data['source']);
+        if (isset($data['parameters_definitions'])) {
+            $object->setParametersDefinitions($data['parameters_definitions']);
         }
-        if (isset($data['project_page'])) {
-            $object->setProjectPage($data['project_page']);
-        }
-        if (isset($data['issues_url'])) {
-            $object->setIssuesUrl($data['issues_url']);
-        }
-        if (isset($data['author'])) {
-            $object->setAuthor($data['author']);
-        }
-        if (isset($data['summary'])) {
-            $object->setSummary($data['summary']);
-        }
-        if (isset($data['license'])) {
-            $object->setLicense($data['license']);
+        if (isset($data['template_definitions'])) {
+            $object->setParametersTemplates($data['template_definitions']);
         }
         return $object;
     }

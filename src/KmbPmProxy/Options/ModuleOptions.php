@@ -52,12 +52,12 @@ class ModuleOptions extends AbstractOptions implements ClientOptionsInterface, P
     /**
      * @var string
      */
-    protected $puppetModuleHydratorClass = 'KmbPmProxy\Model\PuppetModuleHydrator';
+    protected $puppetModuleHydratorClass = 'KmbPmProxy\Hydrator\PuppetModuleHydrator';
 
     /**
      * @var string
      */
-    protected $puppetClassHydratorClass = 'KmbPmProxy\Model\PuppetClassHydrator';
+    protected $puppetClassHydratorClass = 'KmbPmProxy\Hydrator\PuppetClassHydrator';
 
     /**
      * Set PmProxy base URI.

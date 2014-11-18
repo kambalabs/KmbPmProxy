@@ -1,9 +1,10 @@
 <?php
-namespace KmbPmProxyTest\Model;
+namespace KmbPmProxyTest\Validator;
 
 use KmbDomain\Model\GroupParameterType;
 use KmbPmProxy\Model\PuppetClass;
-use KmbPmProxy\Model\PuppetClassValidator;
+use KmbPmProxy\Validator\PuppetClassValidator;
+use KmbPmProxyTest\Model\ParameterFactoryTrait;
 
 class PuppetClassValidatorTest extends \PHPUnit_Framework_TestCase
 {

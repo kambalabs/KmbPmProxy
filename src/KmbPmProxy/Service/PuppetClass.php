@@ -50,8 +50,10 @@ class PuppetClass implements PuppetClassInterface
             $modules = $this->moduleService->getAllByEnvironment($environment);
             $this->classes[$envKey] = [];
             foreach ($modules as $module) {
-                foreach ($module->getClasses() as $class) {
-                    $this->classes[$envKey][$class->getName()] = $class;
+                if ($module->hasClasses()) {
+                    foreach ($module->getClasses() as $class) {
+                        $this->classes[$envKey][$class->getName()] = $class;
+                    }
                 }
             }
         }

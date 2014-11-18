@@ -18,37 +18,56 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Model;
+namespace KmbPmProxy\Hydrator;
 
-use KmbDomain\Model\EnvironmentInterface;
+use KmbPmProxy\Model\PuppetModule;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class EnvironmentHydrator implements HydratorInterface
+class PuppetModuleHydrator implements HydratorInterface
 {
     /**
      * Extract values from an object
      *
-     * @param  EnvironmentInterface $object
+     * @param  PuppetModule $object
      * @return array
      */
     public function extract($object)
     {
-        $data = ['name' => $object->getNormalizedName()];
-        if ($object->hasParent()) {
-            $data['parent'] = strval($object->getParent()->getId());
-        }
-        return $data;
     }
 
     /**
      * Hydrate $object with the provided $data.
      *
      * @param  array  $data
-     * @param  EnvironmentInterface $object
-     * @return EnvironmentInterface
+     * @param  PuppetModule $object
+     * @return PuppetModule
      */
     public function hydrate(array $data, $object)
     {
+        if (isset($data['name'])) {
+            $object->setName($data['name']);
+        }
+        if (isset($data['version'])) {
+            $object->setVersion($data['version']);
+        }
+        if (isset($data['source'])) {
+            $object->setSource($data['source']);
+        }
+        if (isset($data['project_page'])) {
+            $object->setProjectPage($data['project_page']);
+        }
+        if (isset($data['issues_url'])) {
+            $object->setIssuesUrl($data['issues_url']);
+        }
+        if (isset($data['author'])) {
+            $object->setAuthor($data['author']);
+        }
+        if (isset($data['summary'])) {
+            $object->setSummary($data['summary']);
+        }
+        if (isset($data['license'])) {
+            $object->setLicense($data['license']);
+        }
         return $object;
     }
 }

@@ -18,8 +18,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Model;
+namespace KmbPmProxy\Validator;
 
+use KmbPmProxy\Model\PuppetClass;
 use Zend\Validator\AbstractValidator;
 use Zend\Validator\Exception;
 

@@ -13,6 +13,6 @@ class EnvironmentFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('KmbPmProxy\Service\Environment', $service);
         $this->assertInstanceOf('KmbPmProxy\Client', $service->getPmProxyClient());
-        $this->assertInstanceOf('KmbPmProxy\Model\EnvironmentHydrator', $service->getEnvironmentHydrator());
+        $this->assertInstanceOf('KmbPmProxy\Hydrator\EnvironmentHydrator', $service->getEnvironmentHydrator());
     }
 }

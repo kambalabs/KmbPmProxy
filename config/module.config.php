@@ -3,8 +3,8 @@ return [
     'service_manager' => [
         'invokables' => [
             'KmbPmProxy\Http\Client' => 'Zend\Http\Client',
-            'KmbPmProxy\Model\EnvironmentHydrator' => 'KmbPmProxy\Model\EnvironmentHydrator',
-            'KmbPmProxy\Model\PuppetClassValidator' => 'KmbPmProxy\Model\PuppetClassValidator',
+            'KmbPmProxy\Hydrator\EnvironmentHydrator' => 'KmbPmProxy\Hydrator\EnvironmentHydrator',
+            'KmbPmProxy\Validator\PuppetClassValidator' => 'KmbPmProxy\Validator\PuppetClassValidator',
         ],
         'factories' => [
             'KmbPmProxy\Client' => 'KmbPmProxy\ClientFactory',
@@ -21,7 +21,7 @@ return [
             'pmProxyPuppetClassService' => 'KmbPmProxy\Service\PuppetClass',
         ],
         'shared' => [
-            'KmbPmProxy\Model\PuppetClassValidator' => false,
+            'KmbPmProxy\Validator\PuppetClassValidator' => false,
         ],
     ],
     'translator' => [

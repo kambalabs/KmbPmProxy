@@ -43,7 +43,7 @@ class EnvironmentFactory implements FactoryInterface
         $service->setPmProxyClient($pmProxyClient);
 
         /** @var HydratorInterface $environmentHydrator */
-        $environmentHydrator = $serviceLocator->get('KmbPmProxy\Model\EnvironmentHydrator');
+        $environmentHydrator = $serviceLocator->get('KmbPmProxy\Hydrator\EnvironmentHydrator');
         $service->setEnvironmentHydrator($environmentHydrator);
 
         return $service;

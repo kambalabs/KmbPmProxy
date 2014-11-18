@@ -1,8 +1,8 @@
 <?php
-namespace KmbPmProxyTest\Model;
+namespace KmbPmProxyTest\Hydrator;
 
+use KmbPmProxy\Hydrator\PuppetClassHydrator;
 use KmbPmProxy\Model\PuppetClass;
-use KmbPmProxy\Model\PuppetClassHydrator;
 
 class PuppetClassHydratorTest extends \PHPUnit_Framework_TestCase
 {

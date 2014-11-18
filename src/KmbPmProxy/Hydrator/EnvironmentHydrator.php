@@ -18,43 +18,37 @@
  * You should have received a copy of the GNU General Public License
  * along with Kamba.  If not, see <http://www.gnu.org/licenses/>.
  */
-namespace KmbPmProxy\Model;
+namespace KmbPmProxy\Hydrator;
 
+use KmbDomain\Model\EnvironmentInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
-class PuppetClassHydrator implements HydratorInterface
+class EnvironmentHydrator implements HydratorInterface
 {
     /**
      * Extract values from an object
      *
-     * @param  PuppetClass $object
+     * @param  EnvironmentInterface $object
      * @return array
      */
     public function extract($object)
     {
+        $data = ['name' => $object->getNormalizedName()];
+        if ($object->hasParent()) {
+            $data['parent'] = strval($object->getParent()->getId());
+        }
+        return $data;
     }
 
     /**
      * Hydrate $object with the provided $data.
      *
      * @param  array  $data
-     * @param  PuppetClass $object
-     * @return PuppetClass
+     * @param  EnvironmentInterface $object
+     * @return EnvironmentInterface
      */
     public function hydrate(array $data, $object)
     {
-        if (isset($data['name'])) {
-            $object->setName($data['name']);
-        }
-        if (isset($data['doc'])) {
-            $object->setDocumentation($data['doc']);
-        }
-        if (isset($data['parameters_definitions'])) {
-            $object->setParametersDefinitions($data['parameters_definitions']);
-        }
-        if (isset($data['template_definitions'])) {
-            $object->setParametersTemplates($data['template_definitions']);
-        }
         return $object;
     }
 }
