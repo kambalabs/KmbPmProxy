@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Kamba\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-29 00:44+0100\n"
-"PO-Revision-Date: 2014-09-29 00:44+0100\n"
+"POT-Creation-Date: 2014-11-24 11:29+0100\n"
+"PO-Revision-Date: 2014-11-24 11:29+0100\n"
 "Last-Translator: Emmanuel Bouton <goten4@gmail.com>\n"
 "Language-Team: Kamba Contibutors <devteam@kamba.org>\n"
 "Language: \n"
@@ -17,19 +17,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n>1;\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../src/KmbPmProxy/Model/PuppetClassValidator.php:38
+#: ../src/KmbPmProxy/Validator/PuppetClassValidator.php:39
 msgid "Parameter '%value%' should be set as required in the class template"
 msgstr "Le paramètre '%value%' doit être défini comme requis dans le template de classe"
 
-#: ../src/KmbPmProxy/Model/PuppetClassValidator.php:39
+#: ../src/KmbPmProxy/Validator/PuppetClassValidator.php:40
 msgid "Parameter '%value%' shouldn't be set as required in the class template"
 msgstr "Le paramètre '%value%' ne doit pas être défini comme requis dans le template de classe"
 
-#: ../src/KmbPmProxy/Model/PuppetClassValidator.php:40
+#: ../src/KmbPmProxy/Validator/PuppetClassValidator.php:41
 msgid "Parameter '%value%' is missing in the class template"
 msgstr "Le paramètre '%value%' est manquant dans le template de classe"
 
-#: ../src/KmbPmProxy/Model/PuppetClassValidator.php:41
+#: ../src/KmbPmProxy/Validator/PuppetClassValidator.php:42
 msgid "Parameter '%value%' is not defined in the class"
 msgstr "Le paramètre '%value%' n'est pas défini dans la classe"
 
