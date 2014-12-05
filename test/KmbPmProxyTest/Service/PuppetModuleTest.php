@@ -34,7 +34,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $modules = $this->puppetModuleService->getAllByEnvironment($environment);
+        $modules = $this->puppetModuleService->getAllInstalledByEnvironment($environment);
 
         $this->assertEquals(1, count($modules));
         /** @var PuppetModule $module */

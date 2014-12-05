@@ -12,7 +12,7 @@ class PuppetClassTest extends \PHPUnit_Framework_TestCase
     {
         $moduleService = $this->getMock('KmbPmProxy\Service\PuppetModuleInterface');
         $moduleService->expects($this->any())
-            ->method('getAllByEnvironment')
+            ->method('getAllInstalledByEnvironment')
             ->will($this->returnValue([]));
         $puppetClassService = new PuppetClass();
         $puppetClassService->setModuleService($moduleService);
@@ -30,7 +30,7 @@ class PuppetClassTest extends \PHPUnit_Framework_TestCase
         $module->setClasses([$expectedPuppetClass]);
         $moduleService = $this->getMock('KmbPmProxy\Service\PuppetModuleInterface');
         $moduleService->expects($this->any())
-            ->method('getAllByEnvironment')
+            ->method('getAllInstalledByEnvironment')
             ->will($this->returnValue([$module]));
         $puppetClassService = new PuppetClass();
         $puppetClassService->setModuleService($moduleService);
