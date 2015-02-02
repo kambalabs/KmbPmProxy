@@ -49,6 +49,9 @@ class PuppetModule
     /** @var PuppetClass[] */
     protected $classes;
 
+    /** @var  array */
+    protected $availableVersions;
+
     /**
      * @param string $name
      * @param string $version
@@ -290,5 +293,27 @@ class PuppetModule
     public function hasClass($name)
     {
         return $this->getClass($name) !== null;
+    }
+
+    /**
+     * Set AvailableVersions.
+     *
+     * @param array $availableVersions
+     * @return PuppetModule
+     */
+    public function setAvailableVersions($availableVersions)
+    {
+        $this->availableVersions = $availableVersions;
+        return $this;
+    }
+
+    /**
+     * Get AvailableVersions.
+     *
+     * @return array
+     */
+    public function getAvailableVersions()
+    {
+        return $this->availableVersions;
     }
 }

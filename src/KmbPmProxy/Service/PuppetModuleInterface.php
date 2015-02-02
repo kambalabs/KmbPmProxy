@@ -29,6 +29,12 @@ interface PuppetModuleInterface
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @return KmbPmProxy\Model\PuppetModule[]
      */
+    public function getAllInstallableByEnvironment(KmbDomain\Model\EnvironmentInterface $environment);
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @return KmbPmProxy\Model\PuppetModule[]
+     */
     public function getAllInstalledByEnvironment(KmbDomain\Model\EnvironmentInterface $environment);
 
     /**

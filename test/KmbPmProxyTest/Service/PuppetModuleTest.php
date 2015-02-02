@@ -29,7 +29,23 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function canGetAllByEnvironment()
+    public function canGetAllInstallableByEnvironment()
+    {
+        $environment = new Environment();
+        $environment->setId(1);
+
+        $modules = $this->puppetModuleService->getAllInstallableByEnvironment($environment);
+
+        $this->assertEquals(3, count($modules));
+        /** @var PuppetModule $module */
+        $module = $modules['apache'];
+        $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
+        $this->assertEquals('apache', $module->getName());
+        $this->assertEquals([ "2.4.10", "2.4.9", "2.4.8", "2.4.7" ], $module->getAvailableVersions());
+    }
+
+    /** @test */
+    public function canGetAllInstalledByEnvironment()
     {
         $environment = new Environment();
         $environment->setId(1);
@@ -83,39 +99,63 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
         $client = $this->getMock('KmbPmProxy\ClientInterface');
         $client->expects($this->any())
             ->method('get')
-            ->with('/environments/1/modules')
-            ->will($this->returnValue(Json::decode(Json::encode([
-                [
-                    'name' => 'apache',
-                    'version' => '1.0.0',
-                    'source' => 'http://github.com/kambalabs/apache-module',
-                    'project_page' => 'http://github.com/kambalabs/apache-module',
-                    'issues_url' => 'http://github.com/kambalabs/apache-module/issues',
-                    'author' => 'John DOE',
-                    'summary' => 'Puppet scenario for Apache',
-                    'license' => 'MIT',
-                    'classes' => [
+            ->will($this->returnCallback(function ($uri) {
+                $response = [];
+                if ($uri == '/environments/1/modules') {
+                    $response = [
                         [
-                            'name' => 'apache::vhost',
-                            'doc' => '== Class apache::vhost',
-                            'template_definitions' => [
+                            'name' => 'apache',
+                            'version' => '1.0.0',
+                            'source' => 'http://github.com/kambalabs/apache-module',
+                            'project_page' => 'http://github.com/kambalabs/apache-module',
+                            'issues_url' => 'http://github.com/kambalabs/apache-module/issues',
+                            'author' => 'John DOE',
+                            'summary' => 'Puppet scenario for Apache',
+                            'license' => 'MIT',
+                            'classes' => [
                                 [
-                                    'name' => 'hostname',
-                                    'required' => true,
-                                    'multiple_values' => false,
-                                    'type' => 'free-entry',
-                                ],
-                            ],
-                            'parameters_definitions' => [
-                                [
-                                    'name' => 'hostname',
-                                    'required' => true,
+                                    'name' => 'apache::vhost',
+                                    'doc' => '== Class apache::vhost',
+                                    'template_definitions' => [
+                                        [
+                                            'name' => 'hostname',
+                                            'required' => true,
+                                            'multiple_values' => false,
+                                            'type' => 'free-entry',
+                                        ],
+                                    ],
+                                    'parameters_definitions' => [
+                                        [
+                                            'name' => 'hostname',
+                                            'required' => true,
+                                        ],
+                                    ],
                                 ],
                             ],
                         ],
-                    ],
-                ],
-            ]))));
+                    ];
+                } elseif ($uri == '/environments/1/modules/installable') {
+                    $response = [
+                        'apache' => [
+                            "2.4.10",
+                            "2.4.9",
+                            "2.4.8",
+                            "2.4.7",
+                        ],
+                        'php' => [
+                            "5.6.4",
+                            "5.5.3",
+                            "5.4.9",
+                        ],
+                        'dns' => [
+                            "1.0.0",
+                            "0.0.0-master",
+                            "0.0.0-unstable"
+                        ],
+                    ];
+                }
+                return Json::decode(Json::encode($response));
+        }));
         return $client;
     }
 }

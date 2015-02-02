@@ -42,6 +42,24 @@ class PuppetModule implements PuppetModuleInterface
     protected $classHydrator;
 
     /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @return KmbPmProxy\Model\PuppetModule[]
+     */
+    public function getAllInstallableByEnvironment(KmbDomain\Model\EnvironmentInterface $environment)
+    {
+        $modules = [];
+        $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules/installable');
+        foreach ($result as $moduleName => $versions) {
+            $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
+            /** @var \KmbPmProxy\Model\PuppetModule $module */
+            $module = new $moduleEntityClassName();
+            $module->setName($moduleName);
+            $modules[$moduleName] = $module->setAvailableVersions($versions);
+        }
+        return $modules;
+    }
+
+    /**
      * @param Model\EnvironmentInterface $environment
      * @return KmbPmProxy\Model\PuppetModule[]
      */
