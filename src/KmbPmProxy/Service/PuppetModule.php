@@ -20,7 +20,6 @@
  */
 namespace KmbPmProxy\Service;
 
-use KmbDomain\Model;
 use KmbDomain;
 use KmbPmProxy\ClientInterface;
 use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
@@ -60,10 +59,10 @@ class PuppetModule implements PuppetModuleInterface
     }
 
     /**
-     * @param Model\EnvironmentInterface $environment
+     * @param KmbDomain\Model\EnvironmentInterface $environment
      * @return KmbPmProxy\Model\PuppetModule[]
      */
-    public function getAllInstalledByEnvironment(Model\EnvironmentInterface $environment)
+    public function getAllInstalledByEnvironment(KmbDomain\Model\EnvironmentInterface $environment)
     {
         $modules = [];
         $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules');
@@ -81,6 +80,16 @@ class PuppetModule implements PuppetModuleInterface
             $modules[$module->getName()] = $module->setClasses($classes);
         }
         return $modules;
+    }
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     * @param string                               $version
+     */
+    public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
+    {
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), ['module_version' => $version]);
     }
 
     /**

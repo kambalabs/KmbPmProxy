@@ -39,6 +39,13 @@ interface PuppetModuleInterface
 
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     * @param string                               $version
+     */
+    public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version);
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param string                               $name
      * @return KmbPmProxy\Model\PuppetModule
      */
