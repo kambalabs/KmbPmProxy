@@ -26,6 +26,11 @@ use KmbPmProxy;
 interface PuppetModuleInterface
 {
     /**
+     * @return KmbPmProxy\Model\PuppetModule[]
+     */
+    public function getAllAvailable();
+
+    /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @return KmbPmProxy\Model\PuppetModule[]
      */
@@ -43,6 +48,12 @@ interface PuppetModuleInterface
      * @param string                               $version
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version);
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     */
+    public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module);
 
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment

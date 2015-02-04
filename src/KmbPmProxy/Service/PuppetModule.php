@@ -41,17 +41,34 @@ class PuppetModule implements PuppetModuleInterface
     protected $classHydrator;
 
     /**
+     * @return KmbPmProxy\Model\PuppetModule[]
+     */
+    public function getAllAvailable()
+    {
+        $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
+        $modules = [];
+        $result = $this->pmProxyClient->get('/modules/available');
+        foreach ($result as $moduleName => $versions) {
+            /** @var \KmbPmProxy\Model\PuppetModule $module */
+            $module = new $moduleEntityClassName;
+            $module->setName($moduleName);
+            $modules[$moduleName] = $module->setAvailableVersions($versions);
+        }
+        return $modules;
+    }
+
+    /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @return KmbPmProxy\Model\PuppetModule[]
      */
     public function getAllInstallableByEnvironment(KmbDomain\Model\EnvironmentInterface $environment)
     {
+        $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
         $modules = [];
         $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules/installable');
         foreach ($result as $moduleName => $versions) {
-            $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
             /** @var \KmbPmProxy\Model\PuppetModule $module */
-            $module = new $moduleEntityClassName();
+            $module = new $moduleEntityClassName;
             $module->setName($moduleName);
             $modules[$moduleName] = $module->setAvailableVersions($versions);
         }
@@ -64,17 +81,17 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function getAllInstalledByEnvironment(KmbDomain\Model\EnvironmentInterface $environment)
     {
+        $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
         $modules = [];
         $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules');
         foreach ($result as $moduleData) {
-            $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
             /** @var \KmbPmProxy\Model\PuppetModule $module */
-            $module = new $moduleEntityClassName();
+            $module = new $moduleEntityClassName;
             $this->getModuleHydrator()->hydrate((array)$moduleData, $module);
             $classes = [];
             foreach ($moduleData->classes as $classData) {
                 $classEntityClassName = $this->getOptions()->getPuppetClassEntityClass();
-                $puppetClass = new $classEntityClassName();
+                $puppetClass = new $classEntityClassName;
                 $classes[] = $this->getClassHydrator()->hydrate((array)$classData, $puppetClass);
             }
             $modules[$module->getName()] = $module->setClasses($classes);
@@ -90,6 +107,15 @@ class PuppetModule implements PuppetModuleInterface
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), ['module_version' => $version]);
+    }
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     */
+    public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
+    {
+        $this->pmProxyClient->delete('/modules/' . $module->getName());
     }
 
     /**

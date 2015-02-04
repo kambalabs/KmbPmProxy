@@ -29,6 +29,22 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function canGetAllAvailable()
+    {
+        $environment = new Environment();
+        $environment->setId(1);
+
+        $modules = $this->puppetModuleService->getAllAvailable();
+
+        $this->assertEquals(5, count($modules));
+        /** @var PuppetModule $module */
+        $module = $modules['tomcat'];
+        $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
+        $this->assertEquals('tomcat', $module->getName());
+        $this->assertEquals([ "1.2.10", "0.9.3", "0.8.1", "0.7.7" ], $module->getAvailableVersions());
+    }
+
+    /** @test */
     public function canGetAllInstallableByEnvironment()
     {
         $environment = new Environment();
@@ -132,6 +148,34 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
                                     ],
                                 ],
                             ],
+                        ],
+                    ];
+                } elseif ($uri == '/modules/available') {
+                    $response = [
+                        'tomcat' => [
+                            "1.2.10",
+                            "0.9.3",
+                            "0.8.1",
+                            "0.7.7",
+                        ],
+                        'apache' => [
+                            "2.4.10",
+                            "2.4.9",
+                            "2.4.8",
+                            "2.4.7",
+                        ],
+                        'php' => [
+                            "5.6.4",
+                            "5.5.3",
+                            "5.4.9",
+                        ],
+                        'dns' => [
+                            "1.0.0",
+                            "0.0.0-master",
+                            "0.0.0-unstable"
+                        ],
+                        'ntp' => [
+                            "1.0.1",
                         ],
                     ];
                 } elseif ($uri == '/environments/1/modules/installable') {
