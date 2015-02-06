@@ -38,9 +38,9 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(5, count($modules));
         /** @var PuppetModule $module */
-        $module = $modules['tomcat'];
+        $module = $modules['kambalabs-tomcat'];
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
-        $this->assertEquals('tomcat', $module->getName());
+        $this->assertEquals('kambalabs-tomcat', $module->getName());
         $this->assertEquals([ "1.2.10", "0.9.3", "0.8.1", "0.7.7" ], $module->getAvailableVersions());
     }
 
@@ -54,9 +54,9 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(3, count($modules));
         /** @var PuppetModule $module */
-        $module = $modules['apache'];
+        $module = $modules['kambalabs-apache'];
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
-        $this->assertEquals('apache', $module->getName());
+        $this->assertEquals('kambalabs-apache', $module->getName());
         $this->assertEquals([ "2.4.10", "2.4.9", "2.4.8", "2.4.7" ], $module->getAvailableVersions());
     }
 
@@ -70,9 +70,9 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($modules));
         /** @var PuppetModule $module */
-        $module = $modules['apache'];
+        $module = $modules['kambalabs-apache'];
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
-        $this->assertEquals('apache', $module->getName());
+        $this->assertEquals('kambalabs-apache', $module->getName());
         $classes = $module->getClasses();
         $this->assertEquals(1, count($classes));
         /** @var PuppetClass $firtClass */
@@ -87,7 +87,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $module = $this->puppetModuleService->getByEnvironmentAndName($environment, 'unknown');
+        $module = $this->puppetModuleService->getInstalledByEnvironmentAndName($environment, 'unknown');
 
         $this->assertNull($module);
     }
@@ -98,11 +98,11 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
         $environment = new Environment();
         $environment->setId(1);
 
-        $module = $this->puppetModuleService->getByEnvironmentAndName($environment, 'apache');
+        $module = $this->puppetModuleService->getInstalledByEnvironmentAndName($environment, 'kambalabs-apache');
 
         /** @var PuppetModule $module */
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetModule', $module);
-        $this->assertEquals('apache', $module->getName());
+        $this->assertEquals('kambalabs-apache', $module->getName());
         $classes = $module->getClasses();
         $this->assertEquals(1, count($classes));
     }
@@ -122,12 +122,13 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
                         [
                             'name' => 'apache',
                             'version' => '1.0.0',
-                            'source' => 'http://github.com/kambalabs/apache-module',
-                            'project_page' => 'http://github.com/kambalabs/apache-module',
-                            'issues_url' => 'http://github.com/kambalabs/apache-module/issues',
+                            'source' => 'http://github.com/kambalabs/kambalabs-apache.git',
+                            'project_page' => 'http://github.com/kambalabs/kambalabs-apache.git',
+                            'issues_url' => 'http://github.com/kambalabs/kambalabs-apache/issues',
                             'author' => 'John DOE',
                             'summary' => 'Puppet scenario for Apache',
                             'license' => 'MIT',
+                            'forge-name' => 'kambalabs-apache',
                             'classes' => [
                                 [
                                     'name' => 'apache::vhost',
@@ -152,46 +153,46 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
                     ];
                 } elseif ($uri == '/modules/available') {
                     $response = [
-                        'tomcat' => [
+                        'kambalabs-tomcat' => [
                             "1.2.10",
                             "0.9.3",
                             "0.8.1",
                             "0.7.7",
                         ],
-                        'apache' => [
+                        'kambalabs-apache' => [
                             "2.4.10",
                             "2.4.9",
                             "2.4.8",
                             "2.4.7",
                         ],
-                        'php' => [
+                        'kambalabs-php' => [
                             "5.6.4",
                             "5.5.3",
                             "5.4.9",
                         ],
-                        'dns' => [
+                        'kambalabs-dns' => [
                             "1.0.0",
                             "0.0.0-master",
                             "0.0.0-unstable"
                         ],
-                        'ntp' => [
+                        'kambalabs-ntp' => [
                             "1.0.1",
                         ],
                     ];
                 } elseif ($uri == '/environments/1/modules/installable') {
                     $response = [
-                        'apache' => [
+                        'kambalabs-apache' => [
                             "2.4.10",
                             "2.4.9",
                             "2.4.8",
                             "2.4.7",
                         ],
-                        'php' => [
+                        'kambalabs-php' => [
                             "5.6.4",
                             "5.5.3",
                             "5.4.9",
                         ],
-                        'dns' => [
+                        'kambalabs-dns' => [
                             "1.0.0",
                             "0.0.0-master",
                             "0.0.0-unstable"

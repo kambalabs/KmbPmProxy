@@ -44,7 +44,9 @@ class PuppetModuleHydrator implements HydratorInterface
      */
     public function hydrate(array $data, $object)
     {
-        if (isset($data['name'])) {
+        if (isset($data['forge-name'])) {
+            $object->setName($data['forge-name']);
+        } elseif (isset($data['name'])) {
             $object->setName($data['name']);
         }
         if (isset($data['version'])) {

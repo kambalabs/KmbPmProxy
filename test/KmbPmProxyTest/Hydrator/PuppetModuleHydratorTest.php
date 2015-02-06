@@ -20,9 +20,10 @@ class PuppetModuleHydratorTest extends \PHPUnit_Framework_TestCase
             'author' => 'John DOE',
             'summary' => 'Manage NTP service',
             'license' => 'MIT',
+            'forge-name' => 'kambalabs-ntp'
         ], $module);
 
-        $this->assertEquals('ntp', $module->getName());
+        $this->assertEquals('kambalabs-ntp', $module->getName());
         $this->assertEquals('1.0.0', $module->getVersion());
         $this->assertEquals('http://github.com/kambalabs/ntp-module', $module->getSource());
         $this->assertEquals('http://github.com/kambalabs/ntp-module', $module->getProjectPage());
@@ -30,5 +31,18 @@ class PuppetModuleHydratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('John DOE', $module->getAuthor());
         $this->assertEquals('Manage NTP service', $module->getSummary());
         $this->assertEquals('MIT', $module->getLicense());
+    }
+
+    /** @test */
+    public function canHydrateWithoutForgeName()
+    {
+        $module = new PuppetModule();
+        $hydrator = new \KmbPmProxy\Hydrator\PuppetModuleHydrator();
+
+        $module = $hydrator->hydrate([
+            'name' => 'ntp',
+        ], $module);
+
+        $this->assertEquals('ntp', $module->getName());
     }
 }
