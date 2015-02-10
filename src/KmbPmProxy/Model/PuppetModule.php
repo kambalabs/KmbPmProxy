@@ -25,6 +25,9 @@ class PuppetModule
     /** @var string */
     protected $name;
 
+    /** @var boolean */
+    protected $inherited;
+
     /** @var string */
     protected $version;
 
@@ -82,6 +85,28 @@ class PuppetModule
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set Inherited.
+     *
+     * @param boolean $inherited
+     * @return PuppetModule
+     */
+    public function setInherited($inherited)
+    {
+        $this->inherited = $inherited;
+        return $this;
+    }
+
+    /**
+     * Get Inherited.
+     *
+     * @return boolean
+     */
+    public function isInherited()
+    {
+        return $this->inherited;
     }
 
     /**

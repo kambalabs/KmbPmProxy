@@ -20,10 +20,12 @@ class PuppetModuleHydratorTest extends \PHPUnit_Framework_TestCase
             'author' => 'John DOE',
             'summary' => 'Manage NTP service',
             'license' => 'MIT',
-            'forge-name' => 'kambalabs-ntp'
+            'forge-name' => 'kambalabs-ntp',
+            'inherited' => true,
         ], $module);
 
         $this->assertEquals('kambalabs-ntp', $module->getName());
+        $this->assertTrue($module->isInherited());
         $this->assertEquals('1.0.0', $module->getVersion());
         $this->assertEquals('http://github.com/kambalabs/ntp-module', $module->getSource());
         $this->assertEquals('http://github.com/kambalabs/ntp-module', $module->getProjectPage());

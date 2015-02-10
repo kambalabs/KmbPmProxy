@@ -49,6 +49,9 @@ class PuppetModuleHydrator implements HydratorInterface
         } elseif (isset($data['name'])) {
             $object->setName($data['name']);
         }
+        if (isset($data['inherited'])) {
+            $object->setInherited($data['inherited']);
+        }
         if (isset($data['version'])) {
             $object->setVersion($data['version']);
         }
