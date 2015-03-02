@@ -117,6 +117,7 @@ class PuppetModule implements PuppetModuleInterface
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         $this->pmProxyClient->delete('/environments/' . $environment->getId() . '/modules/' . $module->getName());
+        $this->removeFromChildren($environment,$module);
     }
 
     /**
@@ -230,6 +231,15 @@ class PuppetModule implements PuppetModuleInterface
         if($environment->hasChildren()) {
             foreach($environment->getChildren() as $idx => $child) {
                 $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules/' . $module->getName(), ['inherited_from' => $environment->getId()]);
+                $this->installInChildren($child,$module);
+            }
+        }
+    }
+
+    private function removeFromChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module) {
+        if($environment->hasChildren()) {
+            foreach($environment->getChildren() as $idx => $child) {
+                $this->pmProxyClient->delete('/environments/' . $child->getId() . '/modules/' . $module->getName());
                 $this->installInChildren($child,$module);
             }
         }
