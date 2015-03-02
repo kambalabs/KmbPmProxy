@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2014 Orange Applications for Business
+ * @copyright Copyright (c) 2014, 2015 Orange Applications for Business
  * @link      http://github.com/kambalabs for the sources repositories
  *
  * This file is part of Kamba.
@@ -107,6 +107,7 @@ class PuppetModule implements PuppetModuleInterface
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), ['module_version' => $version]);
+        $this->installInChildren($environment,$module);
     }
 
     /**
@@ -223,5 +224,14 @@ class PuppetModule implements PuppetModuleInterface
             $this->classHydrator = new $classHydratorClass;
         }
         return $this->classHydrator;
+    }
+
+    private function installInChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module) {
+        if($environment->hasChildren()) {
+            foreach($environment->getChildren() as $idx => $child) {
+                $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules/' . $module->getName(), ['inherited_from' => $environment->getId()]);
+                $this->installInChildren($child,$module);
+            }
+        }
     }
 }
