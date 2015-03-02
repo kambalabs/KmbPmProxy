@@ -115,7 +115,7 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
-        $this->pmProxyClient->delete('/modules/' . $module->getName());
+        $this->pmProxyClient->delete('/environments/' . $environment->getId() . '/modules/' . $module->getName());
     }
 
     /**
