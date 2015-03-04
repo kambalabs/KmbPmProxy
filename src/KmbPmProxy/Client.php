@@ -164,7 +164,12 @@ class Client implements ClientInterface
         }
 
         $start = microtime(true);
-        $httpResponse = $this->getHttpClient()->send($request);
+        try {
+            $httpResponse = $this->getHttpClient()->send($request);
+        } catch (\Exception $exception) {
+            $this->getLogger()->err('Error on sending request [' . $request->getUri() . '] : ' . $exception->getMessage());
+            throw new RuntimeException('Error on sending request ' . $request->getUri(), 0, $exception);
+        }
         $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
 
         $body = $httpResponse->getBody();
