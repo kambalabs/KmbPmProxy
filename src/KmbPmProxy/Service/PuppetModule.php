@@ -113,6 +113,17 @@ class PuppetModule implements PuppetModuleInterface
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param KmbPmProxy\Model\PuppetModule        $module
+     * @param string                               $version
+     */
+    public function upgradeModuleInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version, $force)
+    {
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() .'/upgrade', ['module_version' => $version, 'force' => $force ? 1 : 0]);
+    }
+
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
      */
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
