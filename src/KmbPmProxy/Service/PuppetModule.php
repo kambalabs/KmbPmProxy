@@ -114,6 +114,7 @@ class PuppetModule implements PuppetModuleInterface
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param KmbPmProxy\Model\PuppetModule        $module
      * @param string                               $version
+     * @param bool                                 $force
      */
     public function upgradeModuleInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version, $force)
     {

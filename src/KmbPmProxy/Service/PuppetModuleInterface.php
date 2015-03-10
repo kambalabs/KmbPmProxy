@@ -52,6 +52,14 @@ interface PuppetModuleInterface
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param KmbPmProxy\Model\PuppetModule        $module
+     * @param string                               $version
+     * @param bool                                 $force
+     */
+    public function upgradeModuleInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version, $force);
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
      */
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module);
 
