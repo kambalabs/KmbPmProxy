@@ -117,7 +117,12 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function upgradeModuleInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version, $force)
     {
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() .'/upgrade', ['module_version' => $version, 'force' => $force ? 1 : 0]);
+        $options = ['module_version' => $version];
+        if(isset($force)) {
+            $options['force'] = 1;
+        }
+
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() .'/upgrade', $options);
     }
 
 
