@@ -278,8 +278,7 @@ class PuppetModule implements PuppetModuleInterface
         $result = [];
         if ($this->isInstalledInEnvironment($environment, $module)) {
             $result[] = $environment;
-        }
-        if ($environment->hasChildren()) {
+        } elseif ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 $result = ArrayUtils::merge($result, $this->getAllDescendantsThatAlreadyHaveModule($child, $module));
             }
