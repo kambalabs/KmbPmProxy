@@ -24,6 +24,7 @@ use KmbDomain;
 use KmbPmProxy\ClientInterface;
 use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
 use KmbPmProxy;
+use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class PuppetModule implements PuppetModuleInterface
@@ -103,9 +104,16 @@ class PuppetModule implements PuppetModuleInterface
      * @param KmbDomain\Model\EnvironmentInterface $environment
      * @param KmbPmProxy\Model\PuppetModule        $module
      * @param string                               $version
+     * @throws KmbPmProxy\Exception\RuntimeException
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
+        $descendants = $this->getAllDescendantsThatAlreadyHaveModule($environment, $module);
+        if (!empty($descendants)) {
+            $descendantsNames = array_map(function (KmbDomain\Model\EnvironmentInterface $environment) { return $environment->getNormalizedName(); }, $descendants);
+            $errorMessage = 'Module is already installed in the following environments : ' . implode(', ', $descendantsNames);
+            throw new KmbPmProxy\Exception\RuntimeException($errorMessage);
+        }
         $options = ['module_version' => $version];
         if ($environment->getParent()) {
             $options['parent'] = $environment->getParent()->getId();
@@ -250,22 +258,50 @@ class PuppetModule implements PuppetModuleInterface
         return $this->classHydrator;
     }
 
-    private function installInChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     * @return boolean
+     */
+    protected function isInstalledInEnvironment($environment, $module)
+    {
+        return $this->getInstalledByEnvironmentAndName($environment, $module->getName()) !== null;
+    }
+
+    /**
+     * @param KmbDomain\Model\EnvironmentInterface $environment
+     * @param KmbPmProxy\Model\PuppetModule        $module
+     * @return KmbDomain\Model\EnvironmentInterface[]
+     */
+    protected function getAllDescendantsThatAlreadyHaveModule($environment, $module)
+    {
+        $result = [];
+        if ($this->isInstalledInEnvironment($environment, $module)) {
+            $result[] = $environment;
+        }
+        if ($environment->hasChildren()) {
+            foreach ($environment->getChildren() as $child) {
+                $result = ArrayUtils::merge($result, $this->getAllDescendantsThatAlreadyHaveModule($child, $module));
+            }
+        }
+        return $result;
+    }
+
+    protected function installInChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         if ($environment->hasChildren()) {
-            foreach ($environment->getChildren() as $idx => $child) {
+            foreach ($environment->getChildren() as $child) {
                 $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules/' . $module->getName(), ['inherited_from' => $environment->getId()]);
                 $this->installInChildren($child, $module);
             }
         }
     }
 
-    private function removeFromChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
+    protected function removeFromChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         if ($environment->hasChildren()) {
-            foreach ($environment->getChildren() as $idx => $child) {
-                $this->pmProxyClient->delete('/environments/' . $child->getId() . '/modules/' . $module->getName());
-                $this->installInChildren($child, $module);
+            foreach ($environment->getChildren() as $child) {
+                $this->removeFromEnvironment($child, $module);
             }
         }
     }
