@@ -106,7 +106,12 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), ['module_version' => $version]);
+        $options = ['module_version' => $version ];
+        if($environment->getParent())
+        {
+            $options['parent'] = $environment->getParent()->getId();
+        }
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), $options);
         $this->installInChildren($environment, $module);
     }
 
@@ -121,6 +126,10 @@ class PuppetModule implements PuppetModuleInterface
         $options = ['module_version' => $version];
         if(isset($force)) {
             $options['force'] = 1;
+        }
+        if($environment->getParent())
+        {
+            $options['parent'] = $environment->getParent()->getId();
         }
 
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() .'/upgrade', $options);
