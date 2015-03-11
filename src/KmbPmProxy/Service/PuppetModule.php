@@ -22,9 +22,8 @@ namespace KmbPmProxy\Service;
 
 use KmbDomain;
 use KmbPmProxy\ClientInterface;
-use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
 use KmbPmProxy;
-use Zend\Stdlib\ArrayUtils;
+use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class PuppetModule implements PuppetModuleInterface
@@ -108,16 +107,11 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
-        $descendants = $this->getAllDescendantsThatAlreadyHaveModule($environment, $module);
-        if (!empty($descendants)) {
-            $descendantsNames = array_map(function (KmbDomain\Model\EnvironmentInterface $environment) { return $environment->getNormalizedName(); }, $descendants);
-            $errorMessage = 'Module is already installed in the following environments : ' . implode(', ', $descendantsNames);
-            throw new KmbPmProxy\Exception\RuntimeException($errorMessage);
-        }
         $options = ['module_version' => $version];
-        if ($environment->getParent()) {
+        if ($environment->hasParent()) {
             $options['parent'] = $environment->getParent()->getId();
         }
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $options);
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), $options);
         $this->installInChildren($environment, $module);
     }
@@ -134,10 +128,11 @@ class PuppetModule implements PuppetModuleInterface
         if (isset($force)) {
             $options['force'] = 1;
         }
-        if ($environment->getParent()) {
+        if ($environment->hasParent()) {
             $options['parent'] = $environment->getParent()->getId();
         }
 
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $options);
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() . '/upgrade', $options);
     }
 
@@ -148,6 +143,7 @@ class PuppetModule implements PuppetModuleInterface
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         $this->pmProxyClient->delete('/environments/' . $environment->getId() . '/modules/' . $module->getName());
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $environment->hasParent() ? ['parent' => $environment->getParent()->getId()] : null);
         $this->removeFromChildren($environment, $module);
     }
 
@@ -268,29 +264,13 @@ class PuppetModule implements PuppetModuleInterface
         return $this->getInstalledByEnvironmentAndName($environment, $module->getName()) !== null;
     }
 
-    /**
-     * @param KmbDomain\Model\EnvironmentInterface $environment
-     * @param KmbPmProxy\Model\PuppetModule        $module
-     * @return KmbDomain\Model\EnvironmentInterface[]
-     */
-    protected function getAllDescendantsThatAlreadyHaveModule($environment, $module)
-    {
-        $result = [];
-        if ($this->isInstalledInEnvironment($environment, $module)) {
-            $result[] = $environment;
-        } elseif ($environment->hasChildren()) {
-            foreach ($environment->getChildren() as $child) {
-                $result = ArrayUtils::merge($result, $this->getAllDescendantsThatAlreadyHaveModule($child, $module));
-            }
-        }
-        return $result;
-    }
-
     protected function installInChildren(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
-                $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules/' . $module->getName(), ['inherited_from' => $environment->getId()]);
+                if (!$this->isInstalledInEnvironment($child, $module)) {
+                    $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules', ['parent' => $environment->getId()]);
+                }
                 $this->installInChildren($child, $module);
             }
         }
