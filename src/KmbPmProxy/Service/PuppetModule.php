@@ -22,8 +22,8 @@ namespace KmbPmProxy\Service;
 
 use KmbDomain;
 use KmbPmProxy\ClientInterface;
-use KmbPmProxy;
 use KmbPmProxy\Options\PuppetModuleServiceOptionsInterface;
+use KmbPmProxy;
 use Zend\Stdlib\Hydrator\HydratorInterface;
 
 class PuppetModule implements PuppetModuleInterface
@@ -106,9 +106,8 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
-        $options = ['module_version' => $version ];
-        if($environment->getParent())
-        {
+        $options = ['module_version' => $version];
+        if ($environment->getParent()) {
             $options['parent'] = $environment->getParent()->getId();
         }
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), $options);
@@ -124,17 +123,15 @@ class PuppetModule implements PuppetModuleInterface
     public function upgradeModuleInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version, $force)
     {
         $options = ['module_version' => $version];
-        if(isset($force)) {
+        if (isset($force)) {
             $options['force'] = 1;
         }
-        if($environment->getParent())
-        {
+        if ($environment->getParent()) {
             $options['parent'] = $environment->getParent()->getId();
         }
 
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() .'/upgrade', $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() . '/upgrade', $options);
     }
-
 
     /**
      * @param KmbDomain\Model\EnvironmentInterface $environment
