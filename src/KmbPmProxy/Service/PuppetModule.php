@@ -280,7 +280,8 @@ class PuppetModule implements PuppetModuleInterface
     {
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
-                $this->removeFromEnvironment($child, $module);
+                $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules', ['parent' => $environment->getId()]);
+                $this->removeFromChildren($child, $module);
             }
         }
     }
