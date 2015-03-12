@@ -44,6 +44,7 @@ class Environment implements EnvironmentInterface
     {
         $content = $this->getEnvironmentHydrator()->extract($environment);
         $this->pmProxyClient->put('/environments/' . $environment->getId(), $content);
+        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $environment->hasParent() ? ['parent' => $environment->getParent()->getId()] : null);
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 /** @var Model\EnvironmentInterface $child */
