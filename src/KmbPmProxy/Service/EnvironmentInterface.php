@@ -28,9 +28,10 @@ interface EnvironmentInterface
      * Create or update an environment on the Puppet Master
      *
      * @param Model\EnvironmentInterface $environment
+     * @param Model\EnvironmentInterface $cloneFrom
      * @return EnvironmentInterface
      */
-    public function save(Model\EnvironmentInterface $environment);
+    public function save(Model\EnvironmentInterface $environment, Model\EnvironmentInterface $cloneFrom = null);
 
     /**
      * Remove an environment on the Puppet Master

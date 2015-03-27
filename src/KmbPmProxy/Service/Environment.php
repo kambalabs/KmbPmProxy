@@ -37,18 +37,26 @@ class Environment implements EnvironmentInterface
      * Create or update an environment on the Puppet Master
      *
      * @param Model\EnvironmentInterface $environment
+     * @param Model\EnvironmentInterface $cloneFrom
      * @return Environment
      * @throws RuntimeException
      */
-    public function save(Model\EnvironmentInterface $environment)
+    public function save(Model\EnvironmentInterface $environment, Model\EnvironmentInterface $cloneFrom = null)
     {
         $content = $this->getEnvironmentHydrator()->extract($environment);
+        if ($cloneFrom != null) {
+            $content['cloneFrom'] = strval($cloneFrom->getId());
+        }
         $this->pmProxyClient->put('/environments/' . $environment->getId(), $content);
         $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $environment->hasParent() ? ['parent' => $environment->getParent()->getId()] : null);
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 /** @var Model\EnvironmentInterface $child */
-                $this->save($child);
+                if ($cloneFrom) {
+                    $this->save($child, $cloneFrom->getChildByName($child->getName()));
+                } else {
+                    $this->save($child);
+                }
             }
         }
         return $this;
