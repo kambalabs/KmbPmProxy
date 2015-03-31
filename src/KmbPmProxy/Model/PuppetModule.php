@@ -28,6 +28,9 @@ class PuppetModule
     /** @var boolean */
     protected $inherited;
 
+    /** @var  boolean */
+    protected $override;
+
     /** @var string */
     protected $version;
 
@@ -107,6 +110,28 @@ class PuppetModule
     public function isInherited()
     {
         return $this->inherited;
+    }
+
+    /**
+     * Set Override.
+     *
+     * @param boolean $override
+     * @return PuppetModule
+     */
+    public function setOverride($override)
+    {
+        $this->override = $override;
+        return $this;
+    }
+
+    /**
+     * Get Override.
+     *
+     * @return boolean
+     */
+    public function isOverride()
+    {
+        return $this->override;
     }
 
     /**
