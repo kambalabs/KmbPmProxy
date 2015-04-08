@@ -109,7 +109,7 @@ class PuppetModule implements PuppetModuleInterface
     {
         $options = ['module_version' => $version];
         if ($environment->hasParent()) {
-            $options['source'] = $environment->getParent()->getId();
+            $options['source'] = $environment->getParent()->getNormalizedName();
         }
         $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $options);
         $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName(), $options);
@@ -128,11 +128,8 @@ class PuppetModule implements PuppetModuleInterface
         if (isset($force)) {
             $options['force'] = 1;
         }
-        if ($environment->hasParent()) {
-            $options['source'] = $environment->getParent()->getId();
-        }
 
-        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $environment->hasParent() ? ['source' => $environment->getParent()->getNormalizedName()] : []);
         $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName() . '/upgrade', $options);
     }
 
