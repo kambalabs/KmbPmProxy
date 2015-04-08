@@ -107,12 +107,10 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function installInEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module, $version)
     {
-        $options = ['module_version' => $version];
         if ($environment->hasParent()) {
-            $options['source'] = $environment->getParent()->getNormalizedName();
+            $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), ['source' => $environment->getParent()->getNormalizedName()]);
         }
-        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $options);
-        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName(), $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName(), ['module_version' => $version]);
         $this->installInChildren($environment, $module);
     }
 
@@ -129,7 +127,9 @@ class PuppetModule implements PuppetModuleInterface
             $options['force'] = 1;
         }
 
-        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $environment->hasParent() ? ['source' => $environment->getParent()->getNormalizedName()] : []);
+        if ($environment->hasParent()) {
+            $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), ['source' => $environment->getParent()->getNormalizedName()]);
+        }
         $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName() . '/upgrade', $options);
     }
 
@@ -140,7 +140,9 @@ class PuppetModule implements PuppetModuleInterface
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
         $this->pmProxyClient->delete('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName());
-        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $environment->hasParent() ? ['source' => $environment->getParent()->getNormalizedName()] : null);
+        if ($environment->hasParent()) {
+            $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), ['source' => $environment->getParent()->getNormalizedName()]);
+        }
         $this->removeFromChildren($environment, $module);
     }
 
