@@ -35,7 +35,7 @@ class EnvironmentHydrator implements HydratorInterface
     {
         $data = ['name' => $object->getNormalizedName()];
         if ($object->hasParent()) {
-            $data['parent'] = strval($object->getParent()->getId());
+            $data['source'] = strval($object->getParent()->getNormalizedName());
         }
         return $data;
     }

@@ -35,7 +35,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function canSave()
     {
-        $this->pmProxyClient->expects($this->exactly(6))
+        $this->pmProxyClient->expects($this->exactly(3))
             ->method('put')
             ->will($this->returnValue(true));
 

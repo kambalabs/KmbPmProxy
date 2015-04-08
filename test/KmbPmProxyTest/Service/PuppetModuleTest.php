@@ -31,9 +31,6 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function canGetAllAvailable()
     {
-        $environment = new Environment();
-        $environment->setId(1);
-
         $modules = $this->puppetModuleService->getAllAvailable();
 
         $this->assertEquals(5, count($modules));
@@ -47,8 +44,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function canGetAllInstallableByEnvironment()
     {
-        $environment = new Environment();
-        $environment->setId(1);
+        $environment = new Environment('STABLE');
 
         $modules = $this->puppetModuleService->getAllInstallableByEnvironment($environment);
 
@@ -63,8 +59,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function canGetAllInstalledByEnvironment()
     {
-        $environment = new Environment();
-        $environment->setId(1);
+        $environment = new Environment('STABLE');
 
         $modules = $this->puppetModuleService->getAllInstalledByEnvironment($environment);
 
@@ -84,8 +79,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function cannotGetUnknownModuleByEnvironmentAndName()
     {
-        $environment = new Environment();
-        $environment->setId(1);
+        $environment = new Environment('STABLE');
 
         $module = $this->puppetModuleService->getInstalledByEnvironmentAndName($environment, 'unknown');
 
@@ -95,8 +89,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function canGetByEnvironmentAndName()
     {
-        $environment = new Environment();
-        $environment->setId(1);
+        $environment = new Environment('STABLE');
 
         $module = $this->puppetModuleService->getInstalledByEnvironmentAndName($environment, 'kambalabs-apache');
 
@@ -117,7 +110,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnCallback(function ($uri) {
                 $response = [];
-                if ($uri == '/environments/1/modules') {
+                if ($uri == '/environments/STABLE/modules') {
                     $response = [
                         [
                             'name' => 'apache',
@@ -179,7 +172,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
                             "1.0.1",
                         ],
                     ];
-                } elseif ($uri == '/environments/1/modules/installable') {
+                } elseif ($uri == '/environments/STABLE/modules/installable') {
                     $response = [
                         'kambalabs-apache' => [
                             "2.4.10",

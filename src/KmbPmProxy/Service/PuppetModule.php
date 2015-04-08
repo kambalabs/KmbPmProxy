@@ -65,7 +65,7 @@ class PuppetModule implements PuppetModuleInterface
     {
         $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
         $modules = [];
-        $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules/installable');
+        $result = $this->pmProxyClient->get('/environments/' . $environment->getNormalizedName() . '/modules/installable');
         foreach ($result as $moduleName => $versions) {
             /** @var \KmbPmProxy\Model\PuppetModule $module */
             $module = new $moduleEntityClassName;
@@ -83,7 +83,7 @@ class PuppetModule implements PuppetModuleInterface
     {
         $moduleEntityClassName = $this->getOptions()->getPuppetModuleEntityClass();
         $modules = [];
-        $result = $this->pmProxyClient->get('/environments/' . $environment->getId() . '/modules');
+        $result = $this->pmProxyClient->get('/environments/' . $environment->getNormalizedName() . '/modules');
         foreach ($result as $moduleData) {
             /** @var \KmbPmProxy\Model\PuppetModule $module */
             $module = new $moduleEntityClassName;
@@ -109,10 +109,10 @@ class PuppetModule implements PuppetModuleInterface
     {
         $options = ['module_version' => $version];
         if ($environment->hasParent()) {
-            $options['parent'] = $environment->getParent()->getId();
+            $options['source'] = $environment->getParent()->getId();
         }
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $options);
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName(), $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName(), $options);
         $this->installInChildren($environment, $module);
     }
 
@@ -129,11 +129,11 @@ class PuppetModule implements PuppetModuleInterface
             $options['force'] = 1;
         }
         if ($environment->hasParent()) {
-            $options['parent'] = $environment->getParent()->getId();
+            $options['source'] = $environment->getParent()->getId();
         }
 
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $options);
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules/' . $module->getName() . '/upgrade', $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $options);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName() . '/upgrade', $options);
     }
 
     /**
@@ -142,8 +142,8 @@ class PuppetModule implements PuppetModuleInterface
      */
     public function removeFromEnvironment(KmbDomain\Model\EnvironmentInterface $environment, KmbPmProxy\Model\PuppetModule $module)
     {
-        $this->pmProxyClient->delete('/environments/' . $environment->getId() . '/modules/' . $module->getName());
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $environment->hasParent() ? ['parent' => $environment->getParent()->getId()] : null);
+        $this->pmProxyClient->delete('/environments/' . $environment->getNormalizedName() . '/modules/' . $module->getName());
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $environment->hasParent() ? ['source' => $environment->getParent()->getNormalizedName()] : null);
         $this->removeFromChildren($environment, $module);
     }
 
@@ -269,7 +269,7 @@ class PuppetModule implements PuppetModuleInterface
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 if (!$this->isInstalledInEnvironment($child, $module)) {
-                    $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules', ['parent' => $environment->getId()]);
+                    $this->pmProxyClient->put('/environments/' . $child->getNormalizedName(), ['source' => $environment->getNormalizedName()]);
                 }
                 $this->installInChildren($child, $module);
             }
@@ -280,7 +280,7 @@ class PuppetModule implements PuppetModuleInterface
     {
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
-                $this->pmProxyClient->put('/environments/' . $child->getId() . '/modules', ['parent' => $environment->getId()]);
+                $this->pmProxyClient->put('/environments/' . $child->getNormalizedName(), ['source' => $environment->getNormalizedName()]);
                 $this->removeFromChildren($child, $module);
             }
         }

@@ -45,10 +45,9 @@ class Environment implements EnvironmentInterface
     {
         $content = $this->getEnvironmentHydrator()->extract($environment);
         if ($cloneFrom != null) {
-            $content['cloneFrom'] = strval($cloneFrom->getId());
+            $content['cloneFrom'] = strval($cloneFrom->getNormalizedName());
         }
-        $this->pmProxyClient->put('/environments/' . $environment->getId(), $content);
-        $this->pmProxyClient->put('/environments/' . $environment->getId() . '/modules', $environment->hasParent() ? ['parent' => $environment->getParent()->getId()] : null);
+        $this->pmProxyClient->put('/environments/' . $environment->getNormalizedName(), $content);
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 /** @var Model\EnvironmentInterface $child */
@@ -70,7 +69,7 @@ class Environment implements EnvironmentInterface
      */
     public function remove(Model\EnvironmentInterface $environment)
     {
-        $this->pmProxyClient->delete('/environments/' . $environment->getId());
+        $this->pmProxyClient->delete('/environments/' . $environment->getNormalizedName());
         if ($environment->hasChildren()) {
             foreach ($environment->getChildren() as $child) {
                 /** @var Model\EnvironmentInterface $child */
