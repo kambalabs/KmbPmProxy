@@ -180,6 +180,10 @@ class Client implements ClientInterface
             throw new NotFoundException($message);
         } elseif (!$httpResponse->isSuccess()) {
             $this->getLogger()->err('[' . $httpResponse->renderStatusLine() . '] ' . $body);
+            $type = $result !== null && !empty($result->type) ? $result->type : '';
+            if ($type === 'Exceptions::PuppetModuleException') {
+                throw new RuntimeException($message);
+            }
             throw new RuntimeException($message);
         }
 
