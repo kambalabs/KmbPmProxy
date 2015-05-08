@@ -21,6 +21,7 @@
 namespace KmbPmProxy;
 
 use KmbPmProxy\Exception\NotFoundException;
+use KmbPmProxy\Exception\PuppetModuleException;
 use KmbPmProxy\Exception\RuntimeException;
 use KmbPmProxy\Options\ClientOptionsInterface;
 use Zend\Http\Headers;
@@ -146,6 +147,7 @@ class Client implements ClientInterface
      * @param $content
      * @return mixed
      * @throws RuntimeException
+     * @throws PuppetModuleException
      * @throws NotFoundException
      */
     protected function send($method, $uri, $content = null)
@@ -182,7 +184,7 @@ class Client implements ClientInterface
             $this->getLogger()->err('[' . $httpResponse->renderStatusLine() . '] ' . $body);
             $type = $result !== null && !empty($result->type) ? $result->type : '';
             if ($type === 'Exceptions::PuppetModuleException') {
-                throw new RuntimeException($message);
+                throw new PuppetModuleException($message);
             }
             throw new RuntimeException($message);
         }
