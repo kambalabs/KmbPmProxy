@@ -13,6 +13,7 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->module = new PuppetModule('apache', '1.0.0');
         $this->module->setClasses([new PuppetClass('apache::vhost')]);
+        $this->module->setAvailableVersions(['1.0.1', '1.0.0', '0.0.0-124-1ad030a-unstable']);
     }
 
     /** @test */
@@ -44,5 +45,17 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('KmbPmProxy\Model\PuppetClass', $class);
         $this->assertEquals('apache::vhost', $class->getName());
+    }
+
+    /** @test */
+    public function cannotGetAvailableVersionMatchingBranchForUnknownBranch()
+    {
+        $this->assertNull($this->module->getAvailableVersionMatchingBranch('unknown'));
+    }
+
+    /** @test */
+    public function canGetAvailableVersionMatchingBranch()
+    {
+        $this->assertEquals('0.0.0-124-1ad030a-unstable', $this->module->getAvailableVersionMatchingBranch('unstable'));
     }
 }

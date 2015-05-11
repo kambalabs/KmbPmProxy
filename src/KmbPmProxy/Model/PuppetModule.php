@@ -366,4 +366,17 @@ class PuppetModule
     {
         return $this->availableVersions;
     }
+
+    /**
+     * @param string $branch
+     * @return string
+     */
+    public function getAvailableVersionMatchingBranch($branch)
+    {
+        foreach ($this->availableVersions as $version) {
+            if (preg_match('/^[0-9.]+-[0-9]+-[a-fA-F0-9]{7}-'.$branch.'$/', $version)) {
+                return $version;
+            }
+        }
+    }
 }
