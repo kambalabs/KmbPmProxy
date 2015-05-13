@@ -161,7 +161,7 @@ class PuppetModule
      */
     public function isOnBranch()
     {
-        return preg_match('/^[0-9.]+-[0-9]+-[a-fA-F0-9]{7}-.+$/', $this->version) ? true : false;
+        return !empty($this->getBranchNameFromVersion());
     }
 
     /**
@@ -382,9 +382,22 @@ class PuppetModule
     public function getAvailableVersionMatchingBranch($branch)
     {
         foreach ($this->availableVersions as $version) {
-            if (preg_match('/^[0-9.]+-[0-9]+-[a-fA-F0-9]{7}-'.$branch.'$/', $version)) {
+            if ($branch === $this->branchNameFromVersion($version)) {
                 return $version;
             }
+        }
+    }
+
+    public function getBranchNameFromVersion()
+    {
+        return $this->branchNameFromVersion($this->version);
+    }
+
+    protected function branchNameFromVersion($version)
+    {
+        preg_match('/^(?P<tag>[0-9.]*)(-[0-9]*)?(-(?P<commit>[a-fA-F0-9]{7}))?(-(?P<branch>.*))?$/', $version, $matches);
+        if (isset($matches['branch'])) {
+            return $matches['branch'];
         }
     }
 }

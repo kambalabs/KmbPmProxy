@@ -58,4 +58,28 @@ class PuppetModuleTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('0.0.0-124-1ad030a-unstable', $this->module->getAvailableVersionMatchingBranch('unstable'));
     }
+
+    /** @test */
+    public function canCheckIfIsOnBranch()
+    {
+        $module = new PuppetModule('apache', '1.1.0');
+
+        $this->assertFalse($module->isOnBranch());
+
+        $module->setVersion('0.0.0-124-1ad030a-unstable');
+
+        $this->assertTrue($module->isOnBranch());
+    }
+
+    /** @test */
+    public function canGetBranchNameFromVersion()
+    {
+        $module = new PuppetModule('apache', '1.1.0');
+
+        $this->assertEmpty($module->getBranchNameFromVersion());
+
+        $module->setVersion('0.0.0-124-1ad030a-unstable');
+
+        $this->assertEquals('unstable', $module->getBranchNameFromVersion());
+    }
 }
