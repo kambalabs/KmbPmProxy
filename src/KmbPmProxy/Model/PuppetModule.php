@@ -157,6 +157,14 @@ class PuppetModule
     }
 
     /**
+     * @return boolean
+     */
+    public function isOnBranch()
+    {
+        return preg_match('/^[0-9.]+-[0-9]+-[a-fA-F0-9]{7}-.+$/', $this->version) ? true : false;
+    }
+
+    /**
      * Set Source.
      *
      * @param string $source
