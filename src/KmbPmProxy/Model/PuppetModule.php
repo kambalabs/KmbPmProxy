@@ -161,7 +161,8 @@ class PuppetModule
      */
     public function isOnBranch()
     {
-        return !empty($this->getBranchNameFromVersion());
+        $branchNameFromVersion = $this->getBranchNameFromVersion();
+        return !empty($branchNameFromVersion);
     }
 
     /**
