@@ -50,10 +50,10 @@ class PuppetClassHydrator implements HydratorInterface
         if (isset($data['doc'])) {
             $object->setDocumentation($data['doc']);
         }
-        if (isset($data['parameters_definitions']) && !empty($data['parameters_definitions'])) {
+        if (isset($data['parameters_definitions'])) {
             $object->setParametersDefinitions($data['parameters_definitions']);
         }
-        if (isset($data['template_definitions']) && !empty($data['template_definitions'])) {
+        if (isset($data['template_definitions'])) {
             $object->setParametersTemplates($data['template_definitions']);
         }
         return $object;
