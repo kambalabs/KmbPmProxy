@@ -31,7 +31,7 @@ class GroupClassHydrator implements GroupClassHydratorInterface
     /**
      * Hydrate $class with the provided $templates.
      *
-     * @param  \stdClass[]          $templates
+     * @param  \stdClass[]         $templates
      * @param  GroupClassInterface $class
      * @return GroupClass
      */

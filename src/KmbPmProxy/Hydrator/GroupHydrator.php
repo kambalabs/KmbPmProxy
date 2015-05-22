@@ -38,13 +38,19 @@ class GroupHydrator implements GroupHydratorInterface
     public function hydrate($puppetModules, $group)
     {
         $availableClasses = [];
-        foreach ($puppetModules as $puppetModule) {
-            foreach ($puppetModule->getClasses() as $puppetClass) {
-                $groupClass = $group->getClassByName($puppetClass->getName());
-                if ($groupClass != null) {
-                    $this->groupClassHydrator->hydrate($puppetClass->getParametersTemplates(), $groupClass);
-                } else {
-                    $availableClasses[$puppetModule->getName()][] = $puppetClass->getName();
+        if (!empty($puppetModules)) {
+            foreach ($puppetModules as $puppetModule) {
+                if ($puppetModule->hasClasses()) {
+                    foreach ($puppetModule->getClasses() as $puppetClass) {
+                        $groupClass = $group->getClassByName($puppetClass->getName());
+                        if ($groupClass != null) {
+                            if ($puppetClass->hasParametersTemplates()) {
+                                $this->groupClassHydrator->hydrate($puppetClass->getParametersTemplates(), $groupClass);
+                            }
+                        } else {
+                            $availableClasses[$puppetModule->getName()][] = $puppetClass->getName();
+                        }
+                    }
                 }
             }
         }
