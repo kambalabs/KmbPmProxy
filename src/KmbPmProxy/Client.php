@@ -175,8 +175,8 @@ class Client implements ClientInterface
         }
         $this->logRequest($start, $httpResponse->renderStatusLine(), $uri);
 
-        $body = $httpResponse->getBody();
-        $result = Json::decode(trim($body));
+        $body = trim($httpResponse->getBody());
+        $result = empty($body) ? null : Json::decode($body);
         $message = $result !== null && !empty($result->message) ? $result->message : $httpResponse->renderStatusLine();
         if ($httpResponse->isNotFound()) {
             throw new NotFoundException($message);
