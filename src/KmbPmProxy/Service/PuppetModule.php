@@ -92,7 +92,10 @@ class PuppetModule implements PuppetModuleInterface
             foreach ($moduleData->classes as $classData) {
                 $classEntityClassName = $this->getOptions()->getPuppetClassEntityClass();
                 $puppetClass = new $classEntityClassName;
-                $classes[] = $this->getClassHydrator()->hydrate((array)$classData, $puppetClass);
+                if (!empty($classData)) {
+                    $this->getClassHydrator()->hydrate((array)$classData, $puppetClass);
+                }
+                $classes[] = $puppetClass;
             }
             $modules[$module->getName()] = $module->setClasses($classes);
         }
