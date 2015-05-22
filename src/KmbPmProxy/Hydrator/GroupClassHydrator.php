@@ -37,7 +37,7 @@ class GroupClassHydrator implements GroupClassHydratorInterface
      */
     public function hydrate($templates, $class)
     {
-        if (!empty($templates)) {
+        if (is_array($templates) && !empty($templates)) {
             $availableParameters = array_filter($templates, function ($template) use ($class) {
                 return !$class->hasParameterWithName($template->name);
             });

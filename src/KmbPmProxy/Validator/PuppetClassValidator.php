@@ -57,23 +57,27 @@ class PuppetClassValidator extends AbstractValidator
      */
     public function isValid($value)
     {
-        foreach ($value->getParametersDefinitions() as $parameterDefinition) {
-            $name = $parameterDefinition->name;
-            $parameterTemplate = $value->getParameterTemplate($name);
-            if ($parameterTemplate === null) {
-                $this->abstractOptions['messages'][$name] = $this->createMessage(self::MSG_MISSING_PARAMETER, $name);
-            } elseif ($parameterDefinition->required !== $parameterTemplate->required) {
-                $this->abstractOptions['messages'][$name] = $this->createMessage(
-                    $parameterDefinition->required ? self::MSG_REQUIRED : self::MSG_NOT_REQUIRED,
-                    $name
-                );
+        if ($value->hasParametersDefinitions()) {
+            foreach ($value->getParametersDefinitions() as $parameterDefinition) {
+                $name = $parameterDefinition->name;
+                $parameterTemplate = $value->getParameterTemplate($name);
+                if ($parameterTemplate === null) {
+                    $this->abstractOptions['messages'][$name] = $this->createMessage(self::MSG_MISSING_PARAMETER, $name);
+                } elseif ($parameterDefinition->required !== $parameterTemplate->required) {
+                    $this->abstractOptions['messages'][$name] = $this->createMessage(
+                        $parameterDefinition->required ? self::MSG_REQUIRED : self::MSG_NOT_REQUIRED,
+                        $name
+                    );
+                }
             }
         }
 
-        foreach ($value->getParametersTemplates() as $parameterTemplate) {
-            $name = $parameterTemplate->name;
-            if (!$value->hasParameterDefinition($name)) {
-                $this->abstractOptions['messages'][$name] = $this->createMessage(self::MSG_UNDEFINED_PARAMETER, $name);
+        if ($value->hasParametersTemplates()) {
+            foreach ($value->getParametersTemplates() as $parameterTemplate) {
+                $name = $parameterTemplate->name;
+                if (!$value->hasParameterDefinition($name)) {
+                    $this->abstractOptions['messages'][$name] = $this->createMessage(self::MSG_UNDEFINED_PARAMETER, $name);
+                }
             }
         }
 
